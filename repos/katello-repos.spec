@@ -1,6 +1,6 @@
 
 Name:           katello-repos
-Version:        1.4.1
+Version:        1.4.2
 Release:        1%{?dist}
 Summary:        Definition of yum repositories for Katello
 
@@ -43,6 +43,10 @@ install -m 644 katello-foreman.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
 %{_sysconfdir}/yum.repos.d/*.repo
 
 %changelog
+* Sat Apr 27 2013 Justin Sherrill <jsherril@redhat.com> 1.4.2-1
+- Add 'repos/' from commit 'b3df18719d52a3a21ac88709d9d5a70e5f9be796'
+  (jsherril@redhat.com)
+
 * Fri Apr 12 2013 Justin Sherrill <jsherril@redhat.com> 1.4.1-1
 - version bump to 1.4 (jsherril@redhat.com)
 
