@@ -1,0 +1,5 @@
+utils/po/*/*.mo
+utils/po/*/*.pox
+utils/po/*.mo
+utils/redhat-uep.pem
+utils/.rvmrc*
