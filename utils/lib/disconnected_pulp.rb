@@ -13,6 +13,7 @@
 #
 
 require 'runcible'
+require 'uri'
 
 # This class provides business logic for katello-disconnected CLI tool.
 # Individual methods represent cli actions (verbs). This class communicates
@@ -93,12 +94,17 @@ class DisconnectedPulp
       LOG.verbose _("Creating repo %s") % repoid
       dry_run do
         repo = active_repos[repoid]
+        relative_url = URI.split(repo.url)[5]
+        distributors = [Runcible::Extensions::YumDistributor.new(relative_url, 
+            true, true, {:id => 'yum_distributor'}),
+          Runcible::Extensions::IsoDistributor.new(true, true), 
+          Runcible::Extensions::ExportDistributor.new(true, true)]
         yum_importer = Runcible::Extensions::YumImporter.new
         yum_importer.feed_url = repo.url
         yum_importer.ssl_ca_cert = manifest.read_cdn_ca
         yum_importer.ssl_client_cert = repo.cert
         yum_importer.ssl_client_key = repo.key
-        Runcible::Extensions::Repository.create_with_importer(repoid, yum_importer)
+        Runcible::Extensions::Repository.create_with_importer_and_distributors(repoid, yum_importer, distributors)
       end
     end
   end
@@ -121,7 +127,7 @@ class DisconnectedPulp
     end
   end
 
-  def watch delay_time = nil, repoids = nil, once = nil
+  def watch delay_time = nil, repoids = nil, once = nil, watch_type = :sync_status
     if delay_time.nil?
       delay_time = 10
     else
@@ -143,7 +149,14 @@ class DisconnectedPulp
           begin
             # skip if this repo was already finished
             next if finished_repoids[repoid]
-            status = Runcible::Extensions::Repository.sync_status repoid
+            if watch_type == :sync_status
+              status = Runcible::Extensions::Repository.sync_status repoid
+            elsif watch_type == :publish_status
+              status = Runcible::Extensions::Repository.publish_status repoid
+            else
+              LOG.fatal _("Unknown watch_type: %s") % watch_type
+              raise _("Unknown watch_type: %s") % watch_type
+            end
             state = status[0]['state'] || 'unknown' rescue 'unknown'
             exception = status[0]['exception'] || '' rescue ''
             statuses[state] = [] if statuses[state].nil?
@@ -220,12 +233,41 @@ class DisconnectedPulp
         if not onlycreate
           LOG.verbose _("Exporting repo %s") % repoid
           dry_run do
-            Runcible::Resources::Repository.export_NOT_IMPLEMENTED repoid, target_dir, overwrite
+            pulp_task = Runcible::Resources::Repository.publish repoid, 'yum_distributor'
           end
         end
       rescue RestClient::ResourceNotFound => e
         LOG.error _("Repo %s not found, skipping") % repoid
       end
     end
+
+    # wait for repos to finish publishing
+    puts _("Waiting for repos to finish publishing")
+    self.watch(10, repoids.join(','), false, watch_type = :publish_status)
+    puts _("Done watching ...")
+
+    # combine pulp exported repos and the listing files into one tree
+    puts _(" Copying content to #{target_basedir}")
+    cmd = "rsync -aL /var/lib/pulp/published/https/repos/ #{target_basedir}"
+    exitcode = system(cmd)
+    # split the export into DVD sized chunks
+    puts _(" Archiving contents of #{target_basedir} into 4600M tar archives.")
+    puts _(" NOTE: This may take a while.")
+    cmd = "tar czpf - #{target_basedir} | split -d -b 4600M - #{target_basedir}/content-export-"
+    exitcode = system(cmd)
+    # Write out simple script to expand split up archives
+    unsplit_script = "#!/bin/bash\n\n"\
+                     "cat content-export-* | tar xzpf -\n\n"\
+                     "echo \"*** Done expanding archives. ***\"\n"
+    # puts unsplit_script
+    f = File.open("#{target_basedir}/expand_export.sh", 'w') 
+    f.write(unsplit_script)
+    f.chmod(0755)
+    # Clean up dir trees
+    FileUtils.rm_rf("#{target_basedir}/content")
+    FileUtils.rm("#{target_basedir}/listing")
+    puts ""
+    puts _("Done exporting content, please copy #{target_basedir}/* to your disconnected host")
+    puts ""
   end
 end
