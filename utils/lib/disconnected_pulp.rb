@@ -22,7 +22,7 @@ require 'uri'
 class DisconnectedPulp
   attr_accessor :active_manifest, :manifest
 
-  def initialize active_manifest, options, log
+  def initialize(active_manifest, options, log)
     @active_manifest = active_manifest
     @manifest = active_manifest.manifest
     @options = options
@@ -35,7 +35,7 @@ class DisconnectedPulp
     block.call unless @options[:dry_run]
   end
 
-  def list disabled = false
+  def list(disabled = false)
     if disabled
       puts manifest.repositories.values.collect {|r| r.repoid }.sort
     else
@@ -52,7 +52,7 @@ class DisconnectedPulp
     end
   end
 
-  def enable value, repoids = nil, all = nil
+  def enable(value, repoids = nil, all = nil)
     if repoids
       repoids = repoids.split(/,\s*/).collect(&:strip)
     else
@@ -70,7 +70,7 @@ class DisconnectedPulp
     active_manifest.save_repo_conf
   end
 
-  def configure remove_disabled = false
+  def configure(remove_disabled = false)
     active_repos = manifest.repositories
     mfrepos = manifest.enabled_repositories
     purepos = Runcible::Resources::Repository.retrieve_all.collect { |m| m['id'] }
@@ -109,7 +109,7 @@ class DisconnectedPulp
     end
   end
 
-  def synchronize repoids = nil
+  def synchronize(repoids = nil)
     if repoids
       repoids = repoids.split(/,\s*/).collect(&:strip)
     else
@@ -127,7 +127,7 @@ class DisconnectedPulp
     end
   end
 
-  def watch delay_time = nil, repoids = nil, once = nil, watch_type = :sync_status
+  def watch(delay_time = nil, repoids = nil, once = nil, watch_type = :sync_status)
     if delay_time.nil?
       delay_time = 10
     else
@@ -189,7 +189,7 @@ class DisconnectedPulp
     puts _('Watching finished')
   end
 
-  def export target_basedir = nil, repoids = nil, overwrite = false, onlycreate = false, onlyexport = false
+  def export(target_basedir = nil, repoids = nil, overwrite = false, onlycreate = false, onlyexport = false)
     LOG.fatal _('Please provide target directory, see --help') if target_basedir.nil?
     overwrite = false if overwrite.nil?
     onlycreate = false if onlycreate.nil?
