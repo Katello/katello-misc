@@ -1,0 +1,4 @@
+#!/bin/bash
+
+COMMAND="ruby $@"
+scl enable ruby193 "$COMMAND"
