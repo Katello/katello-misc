@@ -1,0 +1,28 @@
+ruby193-ruby(1)
+===============
+:man source:  scl-wrapper
+:man manual:  SCL Wrapper
+
+NAME
+----
+ruby193-ruby - wrapper for running ruby inside of ruby193 Software Collection
+
+
+SYNOPSIS
+--------
+ruby193-ruby <params> ...
+
+DESCRIPTION
+-----------
+
+ruby193-ruby is simply wrapper for
+  scl enable ruby193 "ruby <params> ..."
+
+SEE ALSO
+--------
+ruby193-rake(1)
+
+AUTHORS
+-------
+Miroslav Suchý <msuchy@redhat.com>
+
