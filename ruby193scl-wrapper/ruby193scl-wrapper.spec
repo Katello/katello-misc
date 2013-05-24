@@ -1,6 +1,6 @@
 Name:		ruby193scl-wrapper
-Version:	1.0
-Release:	0%{?dist}
+Version:	1.1
+Release:	1%{?dist}
 Summary:	Wrapper for ruby193 Software Collection
 
 Group:		Applications/System
@@ -72,4 +72,7 @@ install -m 644 ruby193-ruby.1 ruby193-rake.1 %{buildroot}/%{_mandir}/man1/
 
 
 %changelog
+* Fri May 24 2013 Miroslav Suchý <msuchy@redhat.com> 1.1-1
+- new package built with tito
+
 
