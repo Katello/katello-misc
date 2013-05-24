@@ -8,4 +8,4 @@ blacklist =
 
 [katello-nightly-fedora18]
 disttag = .fc18
-blacklist =
+blacklist = ruby193scl-wrapper
