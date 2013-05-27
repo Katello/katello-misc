@@ -12,6 +12,7 @@ BuildArch:  noarch
 Requires:	%{name}-ruby %{name}-rake
 BuildRequires: asciidoc
 BuildRequires: libxslt
+BuildRequires: util-linux
 
 %description
 Contains wrappers for ruby193 Software Collection, which e.g. allows you write
