@@ -2,7 +2,7 @@ katello-service stop
 kill -9 `ps -aef | grep katello | grep -v $(basename $0) | grep -v grep | awk '{print $2}'`
 kill -9 `ps -aef | grep delayed_job | grep -v grep | awk '{print $2}'`
 
-yum erase -y `rpm -qa | grep candlepin` `rpm -qa | grep katello` `rpm -qa | grep ^pulp` `rpm -qa | grep mongo` `rpm -qa | grep postgre` `rpm -qa | grep httpd` `rpm -qa | grep ^mod_` puppet tomcat6 `rpm -qa | grep ^rubygem` `rpm -qa | grep ^ruby193` `rpm -qa | grep ^foreman` ruby rubygems elasticsearch
+yum erase -y `rpm -qa | grep candlepin` `rpm -qa | grep katello` `rpm -qa | grep ^pulp` `rpm -qa | grep ^python-pulp`  `rpm -qa | grep ^pulp-` `rpm -qa | grep mongo` `rpm -qa | grep postgre` `rpm -qa | grep httpd` `rpm -qa | grep ^mod_` puppet tomcat6 `rpm -qa | grep ^rubygem` `rpm -qa | grep ^ruby193` `rpm -qa | grep ^foreman` ruby rubygems elasticsearch
 
 # config files
 rm -rf /etc/pulp/ /etc/candlepin/ /etc/katello/ /usr/share/katello/ /var/lib/puppet/ /var/lib/pgsql/ /var/lib/mongodb/ /var/lib/katello/ /var/lib/pulp/ /etc/httpd/ /etc/tomcat6/ /etc/elasticsearch /var/lib/elasticsearch /usr/share/pulp /var/lib/candlepin /etc/foreman /var/lib/foreman
