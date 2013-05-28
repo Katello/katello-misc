@@ -1,3 +1,6 @@
+%{!?scl:%global pkg_name %{name}}
+%{?scl:%scl_package wrapper}
+
 Name:		ruby193scl-wrapper
 Version:	1.1
 Release:	1%{?dist}
@@ -12,6 +15,7 @@ BuildArch:  noarch
 Requires:	%{name}-ruby %{name}-rake
 BuildRequires: asciidoc
 BuildRequires: libxslt
+BuildRequires: util-linux
 
 %description
 Contains wrappers for ruby193 Software Collection, which e.g. allows you write
@@ -54,21 +58,21 @@ a2x -d manpage -f manpage ruby193-rake.1.asciidoc
 a2x -d manpage -f manpage ruby193-ruby.1.asciidoc
 
 %install
-install -d %{buildroot}%{_mandir}/man1
-install -d -m0755 %{buildroot}%{_bindir}
-install -m 755 ruby193-rake ruby193-ruby %{buildroot}%{_bindir}
-install -m 644 ruby193-ruby.1 ruby193-rake.1 %{buildroot}/%{_mandir}/man1/
+install -d %{buildroot}%{_root_mandir}/man1
+install -d -m0755 %{buildroot}%{_root_bindir}
+install -m 755 ruby193-rake ruby193-ruby %{buildroot}%{_root_bindir}
+install -m 644 ruby193-ruby.1 ruby193-rake.1 %{buildroot}/%{_root_mandir}/man1/
 
 %files
 %doc LICENSE
 
 %files ruby
-%{_bindir}/ruby193-ruby
-%doc %{_mandir}/man1/ruby193-ruby.1*
+%{_root_bindir}/ruby193-ruby
+%doc %{_root_mandir}/man1/ruby193-ruby.1*
 
 %files rake
-%{_bindir}/ruby193-rake
-%doc %{_mandir}/man1/ruby193-rake.1*
+%{_root_bindir}/ruby193-rake
+%doc %{_root_mandir}/man1/ruby193-rake.1*
 
 
 %changelog
