@@ -2,7 +2,7 @@
 %{?scl:%scl_package wrapper}
 
 Name:		ruby193scl-wrapper
-Version:	1.1
+Version:	1.2
 Release:	1%{?dist}
 Summary:	Wrapper for ruby193 Software Collection
 
@@ -76,6 +76,10 @@ install -m 644 ruby193-ruby.1 ruby193-rake.1 %{buildroot}/%{_root_mandir}/man1/
 
 
 %changelog
+* Tue May 28 2013 Miroslav Suchý <msuchy@redhat.com> 1.2-1
+- add util-linux as buildrequires (msuchy@redhat.com)
+- create new package ruby193scl-wrapper (msuchy@redhat.com)
+
 * Fri May 24 2013 Miroslav Suchý <msuchy@redhat.com> 1.1-1
 - new package built with tito
 
