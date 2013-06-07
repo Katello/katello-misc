@@ -15,6 +15,7 @@ import subprocess
 import sys
 import tempfile
 
+from optparse import OptionParser
 
 # Runs a command, and exits if the command is not successful.
 # The output is returned.
@@ -35,6 +36,11 @@ def run_command(cmd):
 if os.getuid() != 0:
     sys.stderr.write('Error: this command requires root access to execute\n')
     sys.exit(8)
+
+parser = OptionParser(description="This script will install the katello packages on the current machine")
+parser.add_option("--enhanced_reporting", action="store_true", 
+    help="If specified the enhanced reporting feature will be installed", default=False)
+(opts, args) = parser.parse_args()
 
 # Figure out where we are running
 INSTALL_FILE = os.path.abspath(__file__)
@@ -80,7 +86,7 @@ if (run_command(["rpm", "-qa", "katello-common"])):
 
 if upgrade:
     print INDENT + "Katello is already installed, running 'yum upgrade'."
-    output = run_command(["yum", "upgrade"])
+    output = run_command(["yum", "upgrade", "-y"])
 
 else:
     # Determine if we need to install katello-all or Katello-headpin-all
@@ -90,10 +96,14 @@ else:
             katello_all = True
     if (katello_all):
         print INDENT + "katello-foreman-all is not yet installed, installing it."
-        run_command(["yum", "install", "-y", "katello-foreman-all"])
+        cmd = ["yum", "install", "-y", "katello-foreman-all"]
     else:
         print INDENT + "katello-headpin-all is not yet installed, installing it."
-        run_command(["yum", "install", "-y", "katello-headpin-all"])
+        cmd = ["yum", "install", "-y", "katello-headpin-all"]
+    if opts.enhanced_reporting:
+        print INDENT + "Enhanced reporting packages will be installed"
+        cmd.extend(["splice", "ruby193-rubygem-splice_reports", "spacewalk-splice-tool"])
+    run_command(cmd)
 
 # Remove the repository file
 print INDENT + "Removing the repository file."
