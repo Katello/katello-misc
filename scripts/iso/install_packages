@@ -86,11 +86,11 @@ else:
     # Determine if we need to install katello-all or Katello-headpin-all
     katello_all = False
     for f in os.listdir(ISO_PACKAGE_DIR):
-        if f.startswith('katello-all'):
+        if f.startswith('katello-foreman-all'):
             katello_all = True
     if (katello_all):
-        print INDENT + "katello-all is not yet installed, installing it."
-        run_command(["yum", "install", "-y", "katello-all"])
+        print INDENT + "katello-foreman-all is not yet installed, installing it."
+        run_command(["yum", "install", "-y", "katello-foreman-all"])
     else:
         print INDENT + "katello-headpin-all is not yet installed, installing it."
         run_command(["yum", "install", "-y", "katello-headpin-all"])
