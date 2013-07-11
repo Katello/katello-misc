@@ -45,6 +45,7 @@ parser.add_option("--enhanced_reporting", action="store_true",
 # Figure out where we are running
 INSTALL_FILE = os.path.abspath(__file__)
 PWD = os.path.dirname(INSTALL_FILE)
+GPG_FILE="/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release"
 REPO_FILE = "/etc/yum.repos.d/katello-local.repo"
 PACAKGES_DIR = os.path.join(PWD, "Packags")
 ISO_PACKAGE_DIR = os.path.join(PWD, "Packages")
@@ -89,6 +90,11 @@ if upgrade:
     output = run_command(["yum", "upgrade", "-y"])
 
 else:
+    # Import the gpg keys
+    if (os.path.exists(GPG_FILE)):
+        print INDENT + "Importing the gpg key."
+        run_command(["rpm", "--import", GPG_FILE])
+
     # Determine if we need to install katello-all or Katello-headpin-all
     katello_all = False
     for f in os.listdir(ISO_PACKAGE_DIR):
