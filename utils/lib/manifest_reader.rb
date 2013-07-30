@@ -65,11 +65,14 @@ class DisconnectedCdnResource
         if code == 200
           return res.body
         elsif code == 404
-          LOG.fatal _("Resource %s not found") % File.join(url, path)
+          LOG.error _("Resource %s not found") % File.join(url, path)
+	  raise Errors::NotFound.new(_("Resource %s not found") % File.join(url, path))
         elsif code == 403
-          LOG.fatal _("Access denied to %s") % File.join(url, path)
+          LOG.error _("Access denied to %s") % File.join(url, path)
+	  raise _("Access denied to %s") % File.join(url, path)
         else
-          LOG.fatal _("Server returned %s error") % code
+          LOG.error _("Server returned %s error") % code
+	  raise _("Server returned %s error") % code
         end
       end
     rescue EOFError
@@ -77,6 +80,14 @@ class DisconnectedCdnResource
     rescue Timeout::Error
       LOG.fatal "Server connection timeout"
     end
+  end
+  
+  def log(error, message)
+    LOG.info(message)
+  end
+  
+  def product
+    # NOOP in disconnected
   end
 end
 
