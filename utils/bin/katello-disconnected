@@ -42,6 +42,7 @@ require "#{DISCONNECTED_PREFIX}/lib/disconnected_pulp.rb"
 
 require "#{KATELLO_PREFIX}/app/lib/util/cdn_var_substitutor.rb"
 require "#{KATELLO_PREFIX}/app/lib/http_resource.rb"
+require "#{KATELLO_PREFIX}/app/lib/errors.rb"
 
 include FastGettext::Translation
 locale_path = File.expand_path(File.join(File.dirname(__FILE__), '..', 'po'))
