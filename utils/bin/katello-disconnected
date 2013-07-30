@@ -78,8 +78,8 @@ Runcible::Base.config = {
   :user     => (CONFIG["user"] || 'admin'),
   :logger   => RestClient.log,
   :oauth    => {
-    :oauth_secret => CONFIG["oauth_key"],
-    :oauth_key    => CONFIG["oauth_secret"] }
+    :oauth_secret => CONFIG["oauth_secret"],
+    :oauth_key    => CONFIG["oauth_key"] }
 }
 
 begin
