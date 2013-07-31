@@ -19,7 +19,7 @@
 %endif
 
 Name:           katello-utils
-Version:        1.4.2
+Version:        1.4.3
 Release:        1%{?dist}
 Summary:        Additional tools for Katello
 
@@ -108,6 +108,14 @@ install -m 0644 man/katello-disconnected.man1 %{buildroot}%{_mandir}/man1/katell
 
 
 %changelog
+* Wed Jul 31 2013 Partha Aji <paji@redhat.com> 1.4.3-1
+- fix swapped variables so we properly send the key and secret
+  (mmccune@redhat.com)
+- 2699 - handle error conditions better so disconnected can continue
+  (mmccune@redhat.com)
+- adding method parens to follow coding convention (mmccune@redhat.com)
+- first stab at exporting pulp content to a directory (mmccune@redhat.com)
+
 * Sat Apr 27 2013 Justin Sherrill <jsherril@redhat.com> 1.4.2-1
 - Build with new repo structure  (jsherril@redhat.com)
 
