@@ -72,7 +72,8 @@ RestClient.log = Object.new.tap do |proxy|
     LOG.debug message
   end
 end
-Runcible::Base.config = {
+
+runcible = Runcible::Instance.new({
   :url      => "https://" + (CONFIG["hostname"] || 'localhost'),
   :api_path => "/pulp/api/v2/",
   :user     => (CONFIG["user"] || 'admin'),
@@ -80,7 +81,7 @@ Runcible::Base.config = {
   :oauth    => {
     :oauth_secret => CONFIG["oauth_secret"],
     :oauth_key    => CONFIG["oauth_key"] }
-}
+})
 
 begin
   require 'newt'
@@ -409,29 +410,29 @@ elsif command == 'info'
 elsif command == 'select' # not supported yet
   newt_select active_manifest.manifest
 elsif command == 'list'
-  pulp = DisconnectedPulp.new active_manifest, options, LOG
+  pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
   pulp.list options[:disabled]
 elsif command == 'enable'
-  pulp = DisconnectedPulp.new active_manifest, options, LOG
+  pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
   pulp.enable true, options[:repos], options[:all]
 elsif command == 'disable'
-  pulp = DisconnectedPulp.new active_manifest, options, LOG
+  pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
   pulp.enable false, options[:repos], options[:all]
 elsif command == 'sync' or command == 'synchronize'
-  pulp = DisconnectedPulp.new active_manifest, options, LOG
+  pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
   pulp.synchronize options[:repos]
 elsif command == 'watch'
-  pulp = DisconnectedPulp.new active_manifest, options, LOG
+  pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
   pulp.watch options[:delay], options[:repos], options[:once]
 elsif command == 'export'
-  pulp = DisconnectedPulp.new active_manifest, options, LOG
+  pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
   pulp.export options[:target], options[:repos], options[:overwrite],
     options[:onlycreate], options[:onlyexport]
 elsif command == 'clean'
-  pulp = DisconnectedPulp.new active_manifest, options, LOG
+  pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
   pulp.clean
 elsif command == 'configure' or command == 'config'
-  pulp = DisconnectedPulp.new active_manifest, options, LOG
+  pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
   pulp.configure options[:remove]
 elsif command == 'setup'
   File.open(CONFIG_DIR + "/config.yml", "w") do |file|

@@ -22,11 +22,12 @@ require 'uri'
 class DisconnectedPulp
   attr_accessor :active_manifest, :manifest
 
-  def initialize(active_manifest, options, log)
+  def initialize(active_manifest, options, log, runcible)
     @active_manifest = active_manifest
     @manifest = active_manifest.manifest
     @options = options
     @log = log
+    @runcible = runcible
   end
 
   def LOG; @log; end
@@ -44,10 +45,10 @@ class DisconnectedPulp
   end
 
   def clean
-    Runcible::Resources::Repository.retrieve_all.each do |repo|
+    @runcible.resources.repository.retrieve_all.each do |repo|
       LOG.verbose _("Removing repo %s") % repo['id']
       dry_run do
-        Runcible::Resources::Repository.delete repo['id']
+        @runcible.resources.repository.delete repo['id']
       end
     end
   end
@@ -73,7 +74,7 @@ class DisconnectedPulp
   def configure(remove_disabled = false)
     active_repos = manifest.repositories
     mfrepos = manifest.enabled_repositories
-    purepos = Runcible::Resources::Repository.retrieve_all.collect { |m| m['id'] }
+    purepos = @runcible.resources.repository.retrieve_all.collect { |m| m['id'] }
     repos_to_be_added = mfrepos - purepos
     repos_to_be_removed = purepos - mfrepos
     LOG.debug _("Enabled repos: %s") % mfrepos.inspect
@@ -85,7 +86,7 @@ class DisconnectedPulp
       repos_to_be_removed.each do |repoid|
         LOG.verbose _("Removing repo %s") % repoid
         dry_run do
-          Runcible::Resources::Repository.delete repoid
+          @runcible.resources.repository.delete repoid
         end
       end
     end
@@ -104,7 +105,7 @@ class DisconnectedPulp
         yum_importer.ssl_ca_cert = manifest.read_cdn_ca
         yum_importer.ssl_client_cert = repo.cert
         yum_importer.ssl_client_key = repo.key
-        Runcible::Extensions::Repository.create_with_importer_and_distributors(repoid, yum_importer, distributors)
+        @runcible.extensions.repository.create_with_importer_and_distributors(repoid, yum_importer, distributors)
       end
     end
   end
@@ -113,13 +114,13 @@ class DisconnectedPulp
     if repoids
       repoids = repoids.split(/,\s*/).collect(&:strip)
     else
-      repoids = Runcible::Resources::Repository.retrieve_all.collect{|r| r['id']}
+      repoids = @runcible.resources.repository.retrieve_all.collect{|r| r['id']}
     end
     repoids.each do |repoid|
       begin
         LOG.verbose _("Synchronizing repo %s") % repoid
         dry_run do
-          Runcible::Resources::Repository.sync repoid
+          @runcible.resources.repository.sync repoid
         end
       rescue RestClient::ResourceNotFound => e
         LOG.error _("Repo %s not found, skipping") % repoid
@@ -137,7 +138,7 @@ class DisconnectedPulp
     if repoids
       repoids = repoids.split(/,\s*/).collect(&:strip)
     else
-      repoids = Runcible::Resources::Repository.retrieve_all.collect{|r| r['id']}
+      repoids = @runcible.resources.repository.retrieve_all.collect{|r| r['id']}
     end
     puts _('Watching sync... (this may be safely interrupted with Ctrl+C)')
     finished_repoids = {}
@@ -150,9 +151,9 @@ class DisconnectedPulp
             # skip if this repo was already finished
             next if finished_repoids[repoid]
             if watch_type == :sync_status
-              status = Runcible::Extensions::Repository.sync_status repoid
+              status = @runcible.extensions.repository.sync_status repoid
             elsif watch_type == :publish_status
-              status = Runcible::Extensions::Repository.publish_status repoid
+              status = @runcible.extensions.repository.publish_status repoid
             else
               LOG.fatal _("Unknown watch_type: %s") % watch_type
               raise _("Unknown watch_type: %s") % watch_type
@@ -198,7 +199,7 @@ class DisconnectedPulp
     if repoids
       repoids = repoids.split(/,\s*/).collect(&:strip)
     else
-      repoids = Runcible::Resources::Repository.retrieve_all.collect{|r| r['id']}
+      repoids = @runcible.resources.retrieve_all.collect{|r| r['id']}
     end
     # create directory structure
     repoids.each do |repoid|
@@ -233,7 +234,7 @@ class DisconnectedPulp
         if not onlycreate
           LOG.verbose _("Exporting repo %s") % repoid
           dry_run do
-            pulp_task = Runcible::Resources::Repository.publish repoid, 'yum_distributor'
+            pulp_task = @runcible.resources.repository.publish repoid, 'yum_distributor'
           end
         end
       rescue RestClient::ResourceNotFound => e
