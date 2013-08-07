@@ -40,6 +40,8 @@ if os.getuid() != 0:
 parser = OptionParser(description="This script will install the katello packages on the current machine")
 parser.add_option("--enhanced_reporting", action="store_true", 
     help="If specified the enhanced reporting feature will be installed", default=False)
+parser.add_option("--nogpgsigs", action="store_true", 
+    help="If specified, package GPG signatures will be ignored when installing" , default=False)
 (opts, args) = parser.parse_args()
 
 # Figure out where we are running
@@ -87,7 +89,11 @@ if (run_command(["rpm", "-qa", "katello-common"])):
 
 if upgrade:
     print INDENT + "Katello is already installed, running 'yum upgrade'."
-    output = run_command(["yum", "upgrade", "-y"])
+    upgrade_cmd = ["yum", "upgrade", "-y"]
+    if opts.nogpgsigs:
+        print INDENT + "WARNING: Package GPG signatures will be ignored!"
+        upgrade_cmd.extend(["--nogpgcheck"])
+    output = run_command(upgrade_cmd)
 
 else:
     # Import the gpg keys
@@ -100,12 +106,16 @@ else:
     for f in os.listdir(ISO_PACKAGE_DIR):
         if f.startswith('katello-foreman-all'):
             katello_all = True
+    cmd = ["yum", "install", "-y"]
+    if opts.nogpgsigs:
+        print INDENT + "WARNING: Package GPG signatures will be ignored!"
+        cmd.extend(["--nogpgcheck"])
     if (katello_all):
         print INDENT + "katello-foreman-all is not yet installed, installing it."
-        cmd = ["yum", "install", "-y", "katello-foreman-all"]
+        cmd.extend(["katello-foreman-all"])
     else:
         print INDENT + "katello-headpin-all is not yet installed, installing it."
-        cmd = ["yum", "install", "-y", "katello-headpin-all"]
+        cmd.extend(["katello-headpin-all"])
     if opts.enhanced_reporting:
         print INDENT + "Enhanced reporting packages will be installed"
         cmd.extend(["splice", "ruby193-rubygem-splice_reports", "spacewalk-splice-tool"])
