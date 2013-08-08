@@ -96,11 +96,11 @@ class DisconnectedPulp
       dry_run do
         repo = active_repos[repoid]
         relative_url = URI.split(repo.url)[5]
-        distributors = [Runcible::Extensions::YumDistributor.new(relative_url, 
+        distributors = [Runcible::Models::YumDistributor.new(relative_url, 
             true, true, {:id => 'yum_distributor'}),
-          Runcible::Extensions::IsoDistributor.new(true, true), 
-          Runcible::Extensions::ExportDistributor.new(true, true)]
-        yum_importer = Runcible::Extensions::YumImporter.new
+          Runcible::Models::IsoDistributor.new(true, true), 
+          Runcible::Models::ExportDistributor.new(true, true)]
+        yum_importer = Runcible::Models::YumImporter.new
         yum_importer.feed_url = repo.url
         yum_importer.ssl_ca_cert = manifest.read_cdn_ca
         yum_importer.ssl_client_cert = repo.cert
