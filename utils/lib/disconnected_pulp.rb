@@ -101,7 +101,7 @@ class DisconnectedPulp
           Runcible::Models::IsoDistributor.new(true, true), 
           Runcible::Models::ExportDistributor.new(true, true)]
         yum_importer = Runcible::Models::YumImporter.new
-        yum_importer.feed_url = repo.url
+        yum_importer.feed = repo.url
         yum_importer.ssl_ca_cert = manifest.read_cdn_ca
         yum_importer.ssl_client_cert = repo.cert
         yum_importer.ssl_client_key = repo.key
