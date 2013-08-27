@@ -70,8 +70,16 @@ class DisconnectedPulp
     end
     active_manifest.save_repo_conf
   end
+  
+  def puppet_queries(repoid, queries)
+    LOG.debug ("updating repo: #{repoid} with queries: #{queries}")
+    repo = @runcible.extensions.repository.retrieve_with_details(repoid)
+    config = {"importer_config" => {"queries" => [queries]}}
+    @runcible.resources.repository.update_importer repoid, "puppet_importer", config
+    LOG.debug _("repo updated")
+  end
 
-  def configure(remove_disabled = false)
+  def configure(remove_disabled = false, puppet = false, puppet_forge_url, puppet_forge_id)
     active_repos = manifest.repositories
     mfrepos = manifest.enabled_repositories
     purepos = @runcible.resources.repository.retrieve_all.collect { |m| m['id'] }
@@ -108,6 +116,21 @@ class DisconnectedPulp
         @runcible.extensions.repository.create_with_importer_and_distributors(repoid, yum_importer, distributors)
       end
     end
+    
+    # enable or disable the puppet forge repo
+    if puppet and not purepos.include?(puppet_forge_id)
+      LOG.debug _("Adding Puppet Forge repo")
+      puppet_importer = Runcible::Models::PuppetImporter.new({"feed" => "http://forge.puppetlabs.com"})
+      puppet_distributors = [Runcible::Models::PuppetDistributor.new('/', true, true, :id => "puppet_distirubtor"), 
+                             Runcible::Models::ExportDistributor.new(true, true)]
+      @runcible.extensions.repository.create_with_importer_and_distributors(puppet_forge_id, puppet_importer, puppet_distributors)
+      LOG.debug _("Done adding Puppet Forge repo")
+    elsif not puppet
+       LOG.debug _("Deleting Puppet Forge repo")
+       @runcible.resources.repository.delete puppet_forge_id
+       LOG.debug _("Deleted Puppet Forge repo")
+    end
+
   end
 
   def synchronize(repoids = nil)
@@ -159,9 +182,10 @@ class DisconnectedPulp
               raise _("Unknown watch_type: %s") % watch_type
             end
             state = status[0]['state'] || 'unknown' rescue 'unknown'
+            items_left = status[0]['progress']['yum_importer']['content']['items_left'] rescue 'unknown'
             exception = status[0]['exception'] || '' rescue ''
             statuses[state] = [] if statuses[state].nil?
-            statuses[state] << [repoid, exception] if not repoid.nil?
+            statuses[state] << [repoid, exception, items_left] if not repoid.nil?
             # remove finished repos
             finished_repoids[repoid] = true if state == 'finished' or state == 'unknown'
           rescue RestClient::ResourceNotFound => e
@@ -173,9 +197,10 @@ class DisconnectedPulp
           end
         end
         statuses.keys.sort.each do |state|
-          puts "#{state}:"
+          puts "State: #{state}:"
           statuses[state].each do |pair|
-            puts "#{pair[0]} #{pair[1]}"
+            puts "  repo: [#{pair[0]}] packages remaining: [#{pair[2]}]"
+            puts "    error: #{pair[1]}" unless pair[1].empty?
           end
         end
         puts "\n"
@@ -195,16 +220,23 @@ class DisconnectedPulp
     overwrite = false if overwrite.nil?
     onlycreate = false if onlycreate.nil?
 
-    active_repos = manifest.repositories
+    # active_repos = manifest.repositories
+    all_repos = @runcible.resources.repository.retrieve_all(:optional => {:details => true})
+    active_repos = {}
+    all_repos.each do |r| 
+      active_repos[r[:id]] = @runcible.extensions.repository.retrieve_with_details(r[:id])
+    end
     if repoids
       repoids = repoids.split(/,\s*/).collect(&:strip)
     else
-      repoids = @runcible.resources.retrieve_all.collect{|r| r['id']}
+      repoids = all_repos.collect{|r| r[:id]}
     end
+    
     # create directory structure
     repoids.each do |repoid|
       repo = active_repos[repoid]
-      target_dir = File.join(target_basedir, repo.path)
+      relative_url = get_relative_url(repo)
+      target_dir = File.join(target_basedir, relative_url)
       if not onlyexport
         LOG.verbose "Creating #{target_dir}"
         FileUtils.mkdir_p target_dir
@@ -228,20 +260,27 @@ class DisconnectedPulp
     end
     # initiate export
     repoids.each do |repoid|
+      # repo = active_repos[repoid]
       repo = active_repos[repoid]
-      target_dir = File.join(target_basedir, repo.path)
+      relative_url = get_relative_url(repo)
+      target_dir = File.join(target_basedir, relative_url)
       begin
         if not onlycreate
           LOG.verbose _("Exporting repo %s") % repoid
           dry_run do
-            pulp_task = @runcible.resources.repository.publish repoid, 'yum_distributor'
+            distributors = repo['distributors']
+            distributors.each do |d|
+              pulp_task = @runcible.resources.repository.publish repoid, d['distributor_type_id']
+            end
+            # 
           end
         end
       rescue RestClient::ResourceNotFound => e
         LOG.error _("Repo %s not found, skipping") % repoid
       end
     end
-
+    
+    exit
     # wait for repos to finish publishing
     puts _("Waiting for repos to finish publishing")
     self.watch(10, repoids.join(','), false, watch_type = :publish_status)
@@ -271,4 +310,20 @@ class DisconnectedPulp
     puts _("Done exporting content, please copy #{target_basedir}/* to your disconnected host")
     puts ""
   end
+  
+private
+  
+  def get_relative_url(repo)
+    # Find the yum_distributor so we can get the basedir
+    repo_path = nil
+    repo['distributors'].each do |d|
+      repo_path = d['config']['relative_url'] if d['id'] == 'yum_distributor'
+    end
+    # if not found default to / 
+    # this will get changed when we add in Pulp's new Puppet Distributor
+    # https://fedorahosted.org/pulp/wiki/PuppetMasterDistributor
+    repo_path = '/' unless not repo_path.nil?
+    repo_path
+  end
+  
 end

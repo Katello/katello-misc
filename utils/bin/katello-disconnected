@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/ruby193-ruby
 #
 # Copyright 2013 Red Hat, Inc.
 #
@@ -90,24 +90,27 @@ rescue LoadError
   NEWT_PRESENT=false
 end
 
+DEFAULT_PUPPET_FORGE_URL = 'http://forge.puppetlabs.com'
+DEFAULT_PUPPET_FORGE_ID = 'puppet-forge'
 DEFAULT_CDNURL = 'https://cdn.redhat.com'
 DEFAULT_CDNCA='/etc/rhsm/ca/redhat-uep.pem'
 
 options = {}
 
 subtext = _('Possible commands are:') + "\n\n" +
-'     ' + _('setup       set pulp configuration (oauth is required)') + "\n" +
-'     ' + _('import      import a manifest') + "\n" +
-'     ' + _('list        list all or enabled repositories') + "\n" +
-'     ' + _('enable      enable particular repository or all repos') + "\n" +
-'     ' + _('disable     disable particular repository or all repos') + "\n" +
-'     ' + _('configure   create and configure repositories in pulp') + "\n" +
-'     ' + _('sync        start synchronizing all or particular repos') + "\n" +
-'     ' + _('watch       watch synchronization progress') + "\n" +
-'     ' + _('export      export all or particular repos') + "\n" +
-'     ' + _('refresh     redownload repository information from CDN') + "\n" +
-'     ' + _('info        print (debugging) manifest information') + "\n" +
-'     ' + _('clean       remove all repositories from pulp') + "\n\n" +
+'     ' + _('setup            set pulp and puppet configuration (oauth is required)') + "\n" +
+'     ' + _('import           import a manifest') + "\n" +
+'     ' + _('list             list all or enabled repositories') + "\n" +
+'     ' + _('enable           enable particular repository or all repos') + "\n" +
+'     ' + _('disable          disable particular repository or all repos') + "\n" +
+'     ' + _('puppet_queries   set which Puppet modules to sync from Puppet Forge') + "\n" +
+'     ' + _('configure        create and configure repositories in pulp') + "\n" +
+'     ' + _('sync             start synchronizing all or particular repos') + "\n" +
+'     ' + _('watch            watch synchronization progress') + "\n" +
+'     ' + _('export           export all or particular repos') + "\n" +
+'     ' + _('refresh          redownload repository information from CDN') + "\n" +
+'     ' + _('info             print (debugging) manifest information') + "\n" +
+'     ' + _('clean            remove all repositories from pulp') + "\n\n" +
 _('Typical workflow: import, edit repos.conf, configure, sync, watch, export.') + "\n" +
 _('More in the manual page katello-disconnected(1).') + "\n\n" +
 _('See "katello-disconnected COMMAND --help" for more information on a specific') + "\n" +
@@ -141,6 +144,7 @@ end
 
 options[:cdn_url] = DEFAULT_CDNURL
 options[:cdn_ca] = DEFAULT_CDNCA
+options[:puppet_forge_url] = DEFAULT_PUPPET_FORGE_URL
 subcommands = {
   'setup' => OptionParser.new do |opts|
     opts.banner = _("Usage:") + " " + _('setup [--option VALUE]')
@@ -164,6 +168,18 @@ subcommands = {
       CONFIG['user'] = value
       options[:save_config] = true
     end
+    opts.on('--enable_puppet', _('Turn on syncing from Puppet Forge (default is disabled)')) do |value|
+      CONFIG['puppet'] = true
+      options[:save_config] = true
+    end
+    opts.on('--disable_puppet', _('Turn off syncing from Puppet Forge (default is disabled)')) do |value|
+      CONFIG['puppet'] = false
+      options[:save_config] = true
+    end
+    # Force a default setting of false
+    if CONFIG['puppet'].nil?
+      CONFIG['puppet'] = false
+    end
   end,
   'import' => OptionParser.new do |opts|
     opts.banner = _("Usage:") + " " + _('import [--manifest MANIFEST]')
@@ -179,6 +195,13 @@ subcommands = {
       options[:cdn_ca] = value
     end
   end,
+  'puppet_queries' => OptionParser.new do |opts|
+    opts.banner = _("Usage:") + " " + _('puppet_filter [--filters filters]')
+    opts.on( '-q', '--queries QUERIES', _('comma-separated list of queries to determine ' + 
+                            'what Puppet modules you wish to sync. Blank means all. ') ) do |queries|
+      options[:queries] = queries
+    end
+  end, 
   'refresh' => OptionParser.new do |opts|
     opts.banner = _("Usage:") + " " + _('refresh')
     opts.on( '-a', '--cdnca FILE', _("CDN CA file (%s)") % DEFAULT_CDNCA ) do |value|
@@ -213,6 +236,12 @@ subcommands = {
       options[:all] = true
     end
   end,
+  'enable_puppet' => OptionParser.new do |opts|
+    opts.banner = _("Usage:") + " " + _('enable_puppet')
+  end,
+  'disable_puppet' => OptionParser.new do |opts|
+    opts.banner = _("Usage:") + " " + _('disable_puppet')
+  end, 
   'select' => OptionParser.new do |opts|
     opts.banner = _("Usage:") + " " + _('select')
   end,
@@ -314,6 +343,10 @@ class ActiveManifest
     # populate repositories
     total_repos = imanifest.populate_repositories
     LOG.verbose _("Total repositories found: %s") % total_repos
+    
+    
+    # Add pre-defined puppet forge
+    
 
     # import successful - move to active
     @manifest = imanifest
@@ -411,13 +444,23 @@ elsif command == 'select' # not supported yet
   newt_select active_manifest.manifest
 elsif command == 'list'
   pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
+  puts _("Red Hat Repositories\n")
   pulp.list options[:disabled]
+  puts _("\nPuppet Forge\n")
+  if options[:disabled].nil? and CONFIG['puppet']
+     puts DEFAULT_PUPPET_FORGE_ID
+  elsif options[:disabled] and not CONFIG['puppet']
+     puts DEFAULT_PUPPET_FORGE_ID
+  end
 elsif command == 'enable'
   pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
   pulp.enable true, options[:repos], options[:all]
 elsif command == 'disable'
   pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
   pulp.enable false, options[:repos], options[:all]
+elsif command == 'puppet_queries'
+  pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
+  pulp.puppet_queries DEFAULT_PUPPET_FORGE_ID, options[:queries]
 elsif command == 'sync' or command == 'synchronize'
   pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
   pulp.synchronize options[:repos]
@@ -433,7 +476,8 @@ elsif command == 'clean'
   pulp.clean
 elsif command == 'configure' or command == 'config'
   pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
-  pulp.configure options[:remove]
+  pulp.configure options[:remove], CONFIG['puppet'], 
+                 options[:puppet_forge_url], DEFAULT_PUPPET_FORGE_ID 
 elsif command == 'setup'
   File.open(CONFIG_DIR + "/config.yml", "w") do |file|
     LOG.debug _("Saving configuration to %s/config.yml") % CONFIG_DIR
