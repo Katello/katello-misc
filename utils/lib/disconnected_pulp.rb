@@ -107,7 +107,6 @@ class DisconnectedPulp
 
         # Yum, ISO and Export
         distributors = [Runcible::Models::YumDistributor.new(relative_url, true, true, {:id => 'yum_distributor'}),
-            Runcible::Models::IsoDistributor.new(true, true, {:relative_path => relative_url}),
             Runcible::Models::ExportDistributor.new(true, true)]
   
         yum_importer = Runcible::Models::YumImporter.new
