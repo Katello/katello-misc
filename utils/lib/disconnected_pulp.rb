@@ -104,10 +104,12 @@ class DisconnectedPulp
       dry_run do
         repo = active_repos[repoid]
         relative_url = URI.split(repo.url)[5]
-        distributors = [Runcible::Models::YumDistributor.new(relative_url, 
-            true, true, {:id => 'yum_distributor'}),
-          Runcible::Models::IsoDistributor.new(true, true), 
-          Runcible::Models::ExportDistributor.new(true, true)]
+
+        # Yum, ISO and Export
+        distributors = [Runcible::Models::YumDistributor.new(relative_url, true, true, {:id => 'yum_distributor'}),
+            Runcible::Models::IsoDistributor.new(true, true, {:relative_path => relative_url}),
+            Runcible::Models::ExportDistributor.new(true, true)]
+  
         yum_importer = Runcible::Models::YumImporter.new
         yum_importer.feed = repo.url
         yum_importer.ssl_ca_cert = manifest.read_cdn_ca
@@ -127,7 +129,7 @@ class DisconnectedPulp
       LOG.debug _("Done adding Puppet Forge repo")
     elsif not puppet
        LOG.debug _("Deleting Puppet Forge repo")
-       @runcible.resources.repository.delete puppet_forge_id
+       @runcible.resources.repository.delete puppet_forge_id rescue RestClient::ResourceNotFound
        LOG.debug _("Deleted Puppet Forge repo")
     end
 
@@ -215,7 +217,8 @@ class DisconnectedPulp
     puts _('Watching finished')
   end
 
-  def export(target_basedir = nil, repoids = nil, overwrite = false, onlycreate = false, onlyexport = false)
+  def export(target_basedir = nil, repoids = nil, overwrite = false, onlycreate = false, 
+             onlyexport = false, start_date=nil, end_date=nil)
     LOG.fatal _('Please provide target directory, see --help') if target_basedir.nil?
     overwrite = false if overwrite.nil?
     onlycreate = false if onlycreate.nil?
@@ -258,6 +261,13 @@ class DisconnectedPulp
     rescue Errno::EPERM => e
       LOG.error _("Cannot chown to 'apache' - %s") % e.message
     end
+
+    # check if we are using start/end dates
+    start_end_options = {}
+    unless start_date.nil? and end_date.nil?
+      start_end_options = {:start_date => start.date, :end_date => end_date}
+    end
+    
     # initiate export
     repoids.each do |repoid|
       # repo = active_repos[repoid]
@@ -270,7 +280,7 @@ class DisconnectedPulp
           dry_run do
             distributors = repo['distributors']
             distributors.each do |d|
-              pulp_task = @runcible.resources.repository.publish repoid, d['distributor_type_id']
+              pulp_task = @runcible.resources.repository.publish repoid, d['id'], start_end_options
             end
             # 
           end
@@ -280,7 +290,6 @@ class DisconnectedPulp
       end
     end
     
-    exit
     # wait for repos to finish publishing
     puts _("Waiting for repos to finish publishing")
     self.watch(10, repoids.join(','), false, watch_type = :publish_status)

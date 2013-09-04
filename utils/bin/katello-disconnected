@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/ruby193-ruby
 #
 # Copyright 2013 Red Hat, Inc.
 #
@@ -286,6 +286,13 @@ subcommands = {
     opts.on( '-e', '--onlyexport', _('Do not create directory structure and only export') ) do
       options[:onlyexport] = true
     end
+    opts.on( '-t', '--start_date START_DATE', _('start date for content export; format: "2009-03-30 00:00:00"') ) do |value|
+      options[:start_date] = value
+    end
+    opts.on( '-t', '--end_date END_DATE', _('end date for content export; format: "2011-03-30 00:00:00"') ) do |value|
+      options[:end_date] = value
+    end
+    
   end,
   'clean' => OptionParser.new do |opts|
     opts.banner = _("Usage:") + " " + _('clean')
@@ -470,7 +477,8 @@ elsif command == 'watch'
 elsif command == 'export'
   pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
   pulp.export options[:target], options[:repos], options[:overwrite],
-    options[:onlycreate], options[:onlyexport]
+    options[:onlycreate], options[:onlyexport], options[:start_date], 
+    options[:end_date]
 elsif command == 'clean'
   pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
   pulp.clean
