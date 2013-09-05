@@ -106,8 +106,8 @@ class DisconnectedPulp
         relative_url = URI.split(repo.url)[5]
 
         # Yum, ISO and Export
-        distributors = [Runcible::Models::YumDistributor.new(relative_url, true, true, {:id => 'yum_distributor'}),
-            Runcible::Models::ExportDistributor.new(true, true)]
+        distributors = [Runcible::Models::YumDistributor.new(relative_url, true, false, {:id => 'yum_distributor'}),
+            Runcible::Models::ExportDistributor.new(true, false)]
   
         yum_importer = Runcible::Models::YumImporter.new
         yum_importer.feed = repo.url
@@ -122,8 +122,8 @@ class DisconnectedPulp
     if puppet and not purepos.include?(puppet_forge_id)
       LOG.debug _("Adding Puppet Forge repo")
       puppet_importer = Runcible::Models::PuppetImporter.new({"feed" => "http://forge.puppetlabs.com"})
-      puppet_distributors = [Runcible::Models::PuppetDistributor.new('/', true, true, :id => "puppet_distirubtor"), 
-                             Runcible::Models::ExportDistributor.new(true, true)]
+      puppet_distributors = [Runcible::Models::PuppetDistributor.new('/', true, false, :id => "puppet_distirubtor"), 
+                             Runcible::Models::ExportDistributor.new(true, false)]
       @runcible.extensions.repository.create_with_importer_and_distributors(puppet_forge_id, puppet_importer, puppet_distributors)
       LOG.debug _("Done adding Puppet Forge repo")
     elsif not puppet
@@ -296,7 +296,8 @@ class DisconnectedPulp
 
     # combine pulp exported repos and the listing files into one tree
     puts _(" Copying content to #{target_basedir}")
-    cmd = "rsync -aL /var/lib/pulp/published/https/repos/ #{target_basedir}"
+    cmd = "rsync -aL /var/lib/pulp/published/http/repos/ #{target_basedir}"
+    cmd = "rsync -aL /var/www/pulp_puppet/http/repos #{target_basedir}"
     exitcode = system(cmd)
     # split the export into DVD sized chunks
     puts _(" Archiving contents of #{target_basedir} into 4600M tar archives.")
@@ -328,8 +329,6 @@ private
       repo_path = d['config']['relative_url'] if d['id'] == 'yum_distributor'
     end
     # if not found default to / 
-    # this will get changed when we add in Pulp's new Puppet Distributor
-    # https://fedorahosted.org/pulp/wiki/PuppetMasterDistributor
     repo_path = '/' unless not repo_path.nil?
     repo_path
   end
