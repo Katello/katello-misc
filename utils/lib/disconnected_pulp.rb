@@ -329,8 +329,7 @@ private
       repo_path = d['config']['relative_url'] if d['id'] == 'yum_distributor'
     end
     # if not found default to / 
-    repo_path = '/' unless not repo_path.nil?
-    repo_path
+    repo_path ||= '/'
   end
   
 end

@@ -286,10 +286,10 @@ subcommands = {
     opts.on( '-e', '--onlyexport', _('Do not create directory structure and only export') ) do
       options[:onlyexport] = true
     end
-    opts.on( '-t', '--start_date START_DATE', _('start date for content export; format: "2009-03-30 00:00:00"') ) do |value|
+    opts.on( '-s', '--start_date START_DATE', _('start date for content export; format: "2009-03-30 00:00:00"') ) do |value|
       options[:start_date] = value
     end
-    opts.on( '-t', '--end_date END_DATE', _('end date for content export; format: "2011-03-30 00:00:00"') ) do |value|
+    opts.on( '-n', '--end_date END_DATE', _('end date for content export; format: "2011-03-30 00:00:00"') ) do |value|
       options[:end_date] = value
     end
     
