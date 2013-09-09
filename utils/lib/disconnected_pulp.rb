@@ -288,7 +288,7 @@ class DisconnectedPulp
         LOG.error _("Repo %s not found, skipping") % repoid
       end
     end
-    
+
     # wait for repos to finish publishing
     puts _("Waiting for repos to finish publishing")
     self.watch(10, repoids.join(','), false, watch_type = :publish_status)
