@@ -7,7 +7,7 @@
 require 'pp'
 require 'rubygems'
 require 'json'
-require '/usr/share/katello/lib/util/manifest_reader.rb'
+require '/usr/share/katello-disconnected/lib/manifest_reader.rb'
 
 if ARGV.size == 0
   puts "Usage: #{$0} manifest.zip"
