@@ -49,7 +49,6 @@ INSTALL_FILE = os.path.abspath(__file__)
 PWD = os.path.dirname(INSTALL_FILE)
 GPG_FILE="/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release"
 REPO_FILE = "/etc/yum.repos.d/katello-local.repo"
-PACAKGES_DIR = os.path.join(PWD, "Packags")
 ISO_PACKAGE_DIR = os.path.join(PWD, "Packages")
 ISO_REPODATA_DIR = os.path.join(PWD, "repodata")
 INDENT = "   - "
