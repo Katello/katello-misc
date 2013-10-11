@@ -19,7 +19,7 @@
 %endif
 
 Name:           katello-utils
-Version:        1.5.0
+Version:        1.5.1
 Release:        1%{?dist}
 Summary:        Additional tools for Katello
 
@@ -108,6 +108,9 @@ install -m 0644 man/katello-disconnected.man1 %{buildroot}%{_mandir}/man1/katell
 
 
 %changelog
+* Fri Oct 11 2013 Partha Aji <paji@redhat.com> 1.5.1-1
+- Bumping package versions for 1.5 (paji@redhat.com)
+
 * Fri Oct 11 2013 Partha Aji <paji@redhat.com> 1.4.4-1
 - minor syntax cleanup with some review from daviddavis (mmccune@redhat.com)
 - fixing style (mmccune@redhat.com)
