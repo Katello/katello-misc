@@ -19,7 +19,7 @@
 %endif
 
 Name:           katello-utils
-Version:        1.4.3
+Version:        1.4.4
 Release:        1%{?dist}
 Summary:        Additional tools for Katello
 
@@ -108,6 +108,23 @@ install -m 0644 man/katello-disconnected.man1 %{buildroot}%{_mandir}/man1/katell
 
 
 %changelog
+* Fri Oct 11 2013 Partha Aji <paji@redhat.com> 1.4.4-1
+- minor syntax cleanup with some review from daviddavis (mmccune@redhat.com)
+- fixing style (mmccune@redhat.com)
+- go back to original interp (mmccune@redhat.com)
+- switch to http only and properly archive up the puppet-forge
+  (mmccune@redhat.com)
+- remove ISO distributor that we don't need (mmccune@redhat.com)
+- adding start/end date support for exports (mmccune@redhat.com)
+- go back to original shell (mmccune@redhat.com)
+- puppet support for katello-disconnected and better syncing status
+  (mmccune@redhat.com)
+- switch to feed vs feed_url (mmccune@redhat.com)
+- update katello-disconnected to use runcible 1.0 style objects
+  (mmccune@redhat.com)
+- update katello-disconnected to use runcible 1.0 style objects
+  (mmccune@redhat.com)
+
 * Wed Jul 31 2013 Partha Aji <paji@redhat.com> 1.4.3-1
 - fix swapped variables so we properly send the key and secret
   (mmccune@redhat.com)
