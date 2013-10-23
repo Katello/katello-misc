@@ -1,6 +1,6 @@
 
 Name:           katello-repos
-Version:        1.4.3
+Version:        1.4.4
 Release:        1%{?dist}
 Summary:        Definition of yum repositories for Katello
 
@@ -43,6 +43,9 @@ install -m 644 katello-foreman.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
 %{_sysconfdir}/yum.repos.d/*.repo
 
 %changelog
+* Wed Oct 23 2013 Partha Aji <paji@redhat.com> 1.4.4-1
+- Repos - Enabling GPG check in repos (paji@redhat.com)
+
 * Fri Oct 11 2013 Partha Aji <paji@redhat.com> 1.4.3-1
 - Updated the katello repos location (paji@redhat.com)
 
