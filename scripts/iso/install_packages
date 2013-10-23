@@ -11,6 +11,7 @@
 #
 #
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -49,8 +50,13 @@ INSTALL_FILE = os.path.abspath(__file__)
 PWD = os.path.dirname(INSTALL_FILE)
 GPG_FILE="/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release"
 REPO_FILE = "/etc/yum.repos.d/katello-local.repo"
+DEST_DIR = "/opt/satellite/"
+
 ISO_PACKAGE_DIR = os.path.join(PWD, "Packages")
 ISO_REPODATA_DIR = os.path.join(PWD, "repodata")
+DEST_PACKAGE_DIR = os.path.join(DEST_DIR, "Packages")
+DEST_REPODATA_DIR = os.path.join(DEST_DIR, "repodata")
+
 INDENT = "   - "
 
 
@@ -65,6 +71,20 @@ if (not os.path.exists(ISO_REPODATA_DIR)):
     sys.stderr.write('Error: There is no repodata Directory\n')
     sys.exit(-1)
 
+if (not os.path.exists(DEST_DIR)):
+    os.makedirs(DEST_DIR)
+
+if (os.path.exists(DEST_PACKAGE_DIR)):
+    shutil.rmtree(DEST_PACKAGE_DIR)
+
+if (os.path.exists(DEST_REPODATA_DIR)):
+    shutil.rmtree(DEST_REPODATA_DIR)
+
+print INDENT + "Copying installation files."
+shutil.copytree(ISO_PACKAGE_DIR, DEST_PACKAGE_DIR)
+shutil.copytree(ISO_REPODATA_DIR, DEST_REPODATA_DIR)
+
+
 # Create a yum repository pointing to the current directory
 print INDENT + "Creating a Repository File"
 repo_file = open(REPO_FILE, 'w')
@@ -75,7 +95,7 @@ repo_file.write("""#
 name=katello-local
 baseurl=file://%s
 enabled=1
-gpgcheck=1""" % (PWD))
+gpgcheck=1""" % (DEST_DIR))
 repo_file.close()
 
 # Determine if we need to do install or update
@@ -121,8 +141,8 @@ else:
     run_command(cmd)
 
 # Remove the repository file
-print INDENT + "Removing the repository file."
-os.remove(REPO_FILE)
+print INDENT + "Installation repository will remain configured for future package installs."
+print INDENT + "Installation media can now be safely unmounted."
 print
 
 
