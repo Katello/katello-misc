@@ -294,17 +294,15 @@ class DisconnectedPulp
     self.watch(10, repoids.join(','), false, watch_type = :publish_status)
     puts _("Done watching ...")
 
-    # combine pulp exported repos and the listing files into one tree
-    puts _(" Copying content to #{target_basedir}")
-    cmd = "rsync -aL /var/lib/pulp/published/http/repos/ #{target_basedir}"
-    system(cmd)
-    cmd = "rsync -aL /var/www/pulp_puppet/http/repos #{target_basedir}"
-    system(cmd)
     # split the export into DVD sized chunks
     puts _(" Archiving contents of #{target_basedir} into 4600M tar archives.")
     puts _(" NOTE: This may take a while.")
-    cmd = "tar czpf - #{target_basedir} | split -d -b 4600M - #{target_basedir}/content-export-"
+    cmd = "tar -C /var/lib/pulp/published/http/repos/ --exclude=Packages/Packages -c -h -z -p -f - . |  split -d -b 4600M - #{target_basedir}/content-export-"
     system(cmd)
+    if File.exist?("/var/www/pulp_puppet/http/repos")
+      cmd = "tar -C /var/www/pulp_puppet/http/repos -c -h -z -p -f - . |  split -d -b 4600M - #{target_basedir}/content-export-puppet-"
+      system(cmd)
+    end
     # Write out simple script to expand split up archives
     unsplit_script = "#!/bin/bash\n\n"\
                      "cat content-export-* | tar xzpf -\n\n"\
