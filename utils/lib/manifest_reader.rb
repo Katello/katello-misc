@@ -81,11 +81,11 @@ class DisconnectedCdnResource
       LOG.fatal "Server connection timeout"
     end
   end
-  
+
   def log(error, message)
     LOG.info(message)
   end
-  
+
   def product
     # NOOP in disconnected
   end
@@ -356,7 +356,7 @@ module ManifestReader
       @entitlements.each_value do |entitlement|
 
         Rails.logger.debug "Processing entitlement #{entitlement.pool_id}"
-        cdn_var_substitutor = Util::CdnVarSubstitutor.new(
+        cdn_var_substitutor = Katello::Util::CdnVarSubstitutor.new(
           DisconnectedCdnResource.new(
             cdn_url,
             :ssl_ca_file => cdn_ca,
