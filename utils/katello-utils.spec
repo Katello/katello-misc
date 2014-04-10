@@ -30,9 +30,7 @@ Source0:        https://fedorahosted.org/releases/k/a/katello/%{name}-%{version}
 
 Requires:       coreutils
 Requires:       unzip
-Requires:       katello-common
-Requires:       katello
-Requires:       katello-glue-pulp
+Requires:       %{?scl_prefix}rubygem(katello)
 Requires:       %{?scl_prefix}rubygems
 Requires:       %{?scl_prefix}rubygem(json)
 Requires:       %{?scl_prefix}rubygem(activesupport)
