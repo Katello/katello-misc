@@ -19,7 +19,7 @@
 %endif
 
 Name:           katello-utils
-Version:        1.5.1
+Version:        1.5.2
 Release:        1%{?dist}
 Summary:        Additional tools for Katello
 
@@ -106,6 +106,18 @@ install -m 0644 man/katello-disconnected.man1 %{buildroot}%{_mandir}/man1/katell
 
 
 %changelog
+* Wed Apr 09 2014 Mike McCune <mmccune@redhat.com> 1.5.2-1
+- Merge pull request #28 from ehelms/fixes-5067 (ericdhelms@gmail.com)
+- Fixes #5067: Updates paths to Katello gem BZ1083201 (ericdhelms@gmail.com)
+- fix katello-utils rpm dependencies (jmontleo@redhat.com)
+- Merge pull request #18 from mccun934/man-reader-path-fix (mmccune@gmail.com)
+- 1013755 - filter out the endless loop of Packages/Packages/Packages
+  (mmccune@redhat.com)
+- 1013755 - make sure we actually export and remove unused var
+  (mmccune@redhat.com)
+- fixing path to manifest_reader.rb to loc from katello-utils
+  (mmccune@redhat.com)
+
 * Fri Oct 11 2013 Partha Aji <paji@redhat.com> 1.5.1-1
 - Bumping package versions for 1.5 (paji@redhat.com)
 
