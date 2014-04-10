@@ -17,9 +17,9 @@
 Encoding.default_external='UTF-8' if RUBY_VERSION >= '1.9'
 
 APP_NAME = 'katello-disconnected'
-KATELLO_PREFIX = ENV['KATELLO_PREFIX'] || '/usr/share/katello'
 DISCONNECTED_PREFIX = ENV['DISCONNECTED_PREFIX'] || '/usr/share/katello-disconnected'
 
+require 'katello'
 require 'ostruct'
 require 'yaml'
 require 'optparse'
@@ -40,9 +40,11 @@ require "#{DISCONNECTED_PREFIX}/lib/manifest_reader.rb"
 require "#{DISCONNECTED_PREFIX}/lib/simple_logger.rb"
 require "#{DISCONNECTED_PREFIX}/lib/disconnected_pulp.rb"
 
-require "#{KATELLO_PREFIX}/app/lib/util/cdn_var_substitutor.rb"
-require "#{KATELLO_PREFIX}/app/lib/http_resource.rb"
-require "#{KATELLO_PREFIX}/app/lib/errors.rb"
+KATELLO_PREFIX = ENV['KATELLO_PREFIX'] || Katello::Engine.root
+
+require "#{KATELLO_PREFIX}/app/lib/katello/util/cdn_var_substitutor.rb"
+require "#{KATELLO_PREFIX}/app/lib/katello/http_resource.rb"
+require "#{KATELLO_PREFIX}/app/lib/katello/errors.rb"
 
 include FastGettext::Translation
 locale_path = File.expand_path(File.join(File.dirname(__FILE__), '..', 'po'))
