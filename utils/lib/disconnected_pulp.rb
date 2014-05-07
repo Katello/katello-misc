@@ -14,6 +14,7 @@
 
 require 'runcible'
 require 'uri'
+require 'socket'
 
 # This class provides business logic for katello-disconnected CLI tool.
 # Individual methods represent cli actions (verbs). This class communicates
@@ -43,6 +44,27 @@ class DisconnectedPulp
       puts manifest.enabled_repositories
     end
   end
+
+  def publish
+    repoids = []
+    @runcible.resources.repository.retrieve_all.each do |repo|
+      repoids << repo['id']
+      LOG.verbose _("Publishing repo %s") % repo['id']
+      dry_run do
+        # @runcible.resources.repository.delete repo['id']
+        repoid = repo['id']
+        distributors = @runcible.extensions.repository.retrieve_with_details(repoid)['distributors']
+        distributors.each do |d|
+          pulp_task = @runcible.resources.repository.publish repoid, d['id'], {}
+        end
+      end
+    end  
+    # wait for repos to finish publishing
+    puts _("Waiting for repos to finish publishing")
+    self.watch(10, repoids.join(','), false, watch_type = :publish_status)
+    puts _("Done publishing, you can find the repos on http://#{Socket.gethostname}/pulp/repos/")
+  end
+
 
   def clean
     @runcible.resources.repository.retrieve_all.each do |repo|
@@ -164,7 +186,7 @@ class DisconnectedPulp
     else
       repoids = @runcible.resources.repository.retrieve_all.collect{|r| r['id']}
     end
-    puts _('Watching sync... (this may be safely interrupted with Ctrl+C)')
+    puts _('Watching... (this may be safely interrupted with Ctrl+C)')
     finished_repoids = {}
     running = true
     while running

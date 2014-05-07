@@ -110,6 +110,7 @@ subtext = _('Possible commands are:') + "\n\n" +
 '     ' + _('sync             start synchronizing all or particular repos') + "\n" +
 '     ' + _('watch            watch synchronization progress') + "\n" +
 '     ' + _('export           export all or particular repos') + "\n" +
+'     ' + _('publish          publish synchronized repositories to http://localhost/pulp/repos/') + "\n" +
 '     ' + _('refresh          redownload repository information from CDN') + "\n" +
 '     ' + _('info             print (debugging) manifest information') + "\n" +
 '     ' + _('clean            remove all repositories from pulp') + "\n\n" +
@@ -299,6 +300,9 @@ subcommands = {
   'clean' => OptionParser.new do |opts|
     opts.banner = _("Usage:") + " " + _('clean')
   end,
+  'publish' => OptionParser.new do |opts|
+    opts.banner = _("Usage:") + " " + _('publish')
+  end, 
 }
 
 begin
@@ -484,6 +488,9 @@ elsif command == 'export'
 elsif command == 'clean'
   pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
   pulp.clean
+elsif command == 'publish'
+  pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
+  pulp.publish
 elsif command == 'configure' or command == 'config'
   pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
   pulp.configure options[:remove], CONFIG['puppet'], 
