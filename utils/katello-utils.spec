@@ -44,6 +44,9 @@ BuildRequires:  findutils
 BuildRequires:  make
 BuildRequires:  gettext translate-toolkit
 BuildRequires:  %{?scl_prefix}ruby
+%if "%{?scl}" == "ruby193"
+BuildRequires: %{?scl_prefix}ruby-wrapper
+%endif
 
 BuildArch: noarch
 
