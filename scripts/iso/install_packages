@@ -86,6 +86,10 @@ shutil.copytree(ISO_REPODATA_DIR, DEST_REPODATA_DIR)
 
 
 # Create a yum repository pointing to the current directory
+# making sure to disable gpgcheck if packages are not signed
+
+GPG_CHECK = 0 if opts.nogpgsigs else 1
+
 print INDENT + "Creating a Repository File"
 repo_file = open(REPO_FILE, 'w')
 repo_file.write("""#
@@ -95,7 +99,7 @@ repo_file.write("""#
 name=katello-local
 baseurl=file://%s
 enabled=1
-gpgcheck=1""" % (DEST_DIR))
+gpgcheck=%s""" % (DEST_DIR, GPG_CHECK))
 repo_file.close()
 
 # Determine if we need to do install or update
