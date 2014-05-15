@@ -5,9 +5,9 @@
 # a Packages and repository subdirectorties
 #
 # After this command is run, the user will need to run the
-# the katello-configure script in order to set up the installation.
+# the katello-installer script in order to set up the installation.
 #
-# Copyright 2013 Red Hat, Inc.
+# Copyright 2013-2014 Red Hat, Inc.
 #
 #
 import os
@@ -103,7 +103,7 @@ repo_file.close()
 upgrade = False
 
 print INDENT + "Checking to see if Katello is already installed."
-if (run_command(["rpm", "-qa", "katello-common"])):
+if (run_command(["rpm", "-qa", "katello"])):
     upgrade = True
 
 if upgrade:
@@ -120,18 +120,19 @@ else:
         print INDENT + "Importing the gpg key."
         run_command(["rpm", "--import", GPG_FILE])
 
-    # Determine if we need to install katello-all or Katello-headpin-all
+    # Determine if we need to install katello or Katello-headpin-all
     katello_all = False
     for f in os.listdir(ISO_PACKAGE_DIR):
-        if f.startswith('katello-foreman-all'):
+        if f.startswith('foreman'):
             katello_all = True
+            break
     cmd = ["yum", "install", "-y"]
     if opts.nogpgsigs:
         print INDENT + "WARNING: Package GPG signatures will be ignored!"
         cmd.extend(["--nogpgcheck"])
     if (katello_all):
-        print INDENT + "katello-foreman-all is not yet installed, installing it."
-        cmd.extend(["katello-foreman-all"])
+        print INDENT + "katello is not yet installed, installing it."
+        cmd.extend(["katello"])
     else:
         print INDENT + "katello-headpin-all is not yet installed, installing it."
         cmd.extend(["katello-headpin-all"])
@@ -148,8 +149,8 @@ print
 
 # fini
 if (upgrade):
-    print "Upgrade is complete. Please backup your data and run katello-configure."
+    print "Upgrade is complete. Please backup your data and run katello-installer."
 else:
-    print "Install is complete. Please run katello-configure."
+    print "Install is complete. Please run katello-installer."
 
 
