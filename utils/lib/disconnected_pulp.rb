@@ -319,7 +319,7 @@ class DisconnectedPulp
     # split the export into DVD sized chunks
     puts _(" Archiving contents of #{target_basedir} into 4600M tar archives.")
     puts _(" NOTE: This may take a while.")
-    cmd = "tar -C /var/lib/pulp/published/http/repos/ --exclude=Packages/Packages -c -h -z -p -f - . |  split -d -b 4600M - #{target_basedir}/content-export-"
+    cmd = "tar -C /var/lib/pulp/published/yum/http/repos/ --exclude=Packages/Packages -c -h -z -p -f - . |  split -d -b 4600M - #{target_basedir}/content-export-"
     system(cmd)
     if File.exist?("/var/www/pulp_puppet/http/repos")
       cmd = "tar -C /var/www/pulp_puppet/http/repos -c -h -z -p -f - . |  split -d -b 4600M - #{target_basedir}/content-export-puppet-"
