@@ -66,13 +66,13 @@ class DisconnectedCdnResource
           return res.body
         elsif code == 404
           LOG.error _("Resource %s not found") % File.join(url, path)
-	  raise Errors::NotFound.new(_("Resource %s not found") % File.join(url, path))
+          raise Katello::Errors::NotFound.new(_("Resource %s not found") % File.join(url, path))
         elsif code == 403
           LOG.error _("Access denied to %s") % File.join(url, path)
-	  raise _("Access denied to %s") % File.join(url, path)
+          raise Katello::Errors::SecurityViolation.new(_("Access denied to %s") % File.join(url, path))
         else
           LOG.error _("Server returned %s error") % code
-	  raise _("Server returned %s error") % code
+          raise _("Server returned %s error") % code
         end
       end
     rescue EOFError
@@ -368,19 +368,24 @@ module ManifestReader
 
           product.content.each_value do |content|
             Rails.logger.debug "Processing #{content.name} #{content.url}"
-
-            cdn_var_substitutor.substitute_vars(content.url).each do |(substitutions, path)|
-              arch = substitutions['basearch']
-              ver  = substitutions['releasever']
-              repo = Repository.new(arch, ver, content.enabled, path)
-              content.add_repository repo
-              repo_counter += 1
-              # when called from disconnected script we want to print this in verbose
-              if Rails.logger.respond_to? :verbose
-                Rails.logger.verbose "Repository found: #{repo.repoid}"
-              else
-                Rails.logger.debug "Repository found: #{repo.repoid}"
+            begin
+              cdn_var_substitutor.substitute_vars(content.url).each do |(substitutions, path)|
+                arch = substitutions['basearch']
+                ver  = substitutions['releasever']
+                repo = Repository.new(arch, ver, content.enabled, path)
+                content.add_repository repo
+                repo_counter += 1
+                # when called from disconnected script we want to print this in verbose
+                if Rails.logger.respond_to? :verbose
+                  Rails.logger.verbose "Repository found: #{repo.repoid}"
+                else
+                  Rails.logger.debug "Repository found: #{repo.repoid}"
+                end
               end
+            rescue Katello::Errors::NotFound => e
+              LOG.error "Not Found : %s, continuing." % e
+            rescue Katello::Errors::SecurityViolation => e
+              LOG.error "Access denied: %s, continuing." % e
             end
           end
         end
