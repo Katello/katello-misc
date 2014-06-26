@@ -8,11 +8,26 @@ then
     exit 1
 fi
 
-katello-service stop
+service elasticsearch stop
+service foreman stop
+service foreman-proxy stop
+service httpd stop
+service katello-jobs stop
+service mongod stop
+service postgresql stop
+service pulp_celerybeat stop
+service puppet stop
+service qpidd stop
+service tomcat6 stop
+service qpidd stop
+
+
 kill -9 `ps -aef | grep katello | grep -v $(basename $0) | grep -v grep | awk '{print $2}'`
 kill -9 `ps -aef | grep delayed_job | grep -v grep | awk '{print $2}'`
+kill -9 `ps -aef | grep foreman | grep -v grep | awk '{print $2}'`
+kill -9 `ps -aef | grep celery | grep -v grep | awk '{print $2}'`
 
-yum erase -y `rpm -qa | grep candlepin` `rpm -qa | grep katello` `rpm -qa | grep ^pulp` `rpm -qa | grep ^python-pulp`  `rpm -qa | grep ^pulp-` `rpm -qa | grep mongo` `rpm -qa | grep postgre` `rpm -qa | grep ^mod_` `rpm -qa | grep ^rubygem` `rpm -qa | grep ^ruby193` `rpm -qa | grep ^foreman` ruby rubygems elasticsearch httpd puppet tomcat tomcat6
+yum erase -y `rpm -qa | grep candlepin` `rpm -qa | grep katello` `rpm -qa | grep ^pulp` `rpm -qa | grep ^python-pulp`  `rpm -qa | grep ^pulp-` `rpm -qa | grep mongo` `rpm -qa | grep postgre` `rpm -qa | grep ^mod_` `rpm -qa | grep ^rubygem` `rpm -qa | grep ^ruby193` `rpm -qa | grep ^foreman` `rpm -qa | grep qpid` ruby rubygems elasticsearch httpd puppet tomcat tomcat6
 
 # config files
 rm -rf /etc/pulp/ /etc/candlepin/ /etc/katello/ /usr/share/katello/ /var/lib/puppet/ /var/lib/pgsql/ /var/lib/mongodb/ /var/lib/katello/ /var/lib/pulp/ /etc/httpd/ /etc/tomcat6/ /etc/elasticsearch /var/lib/elasticsearch /usr/share/pulp /var/lib/candlepin /etc/foreman /var/lib/foreman /etc/tomcat
@@ -25,4 +40,3 @@ rm -rf /etc/pki/pulp/ /etc/pki/content/* /etc/pki/katello /root/ssl-build
 
 # client cert rpms
 rm -rf /var/www/html/pub/candlepin-cert*.rpm
-
