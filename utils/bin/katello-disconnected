@@ -66,6 +66,11 @@ FastGettext.locale = (ENV['LC_ALL'] || ENV['LC_MESSAGES'] || ENV['LANG'] || 'en'
 LOG = SimpleLogger.new
 module Rails; def self.logger; LOG; end; end
 
+# Check to make sure we are running as root
+if ENV['USER'] != 'root'
+ LOG.fatal("#{APP_NAME} must be executed as the root user")
+end
+
 CONFIG_DIR = File.expand_path "~/.#{APP_NAME}"
 CONFIG = YAML::load_file(CONFIG_DIR + "/config.yml") rescue {}
 
