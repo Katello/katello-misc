@@ -26,12 +26,12 @@ class DisconnectedCdnResource
 
   def initialize url, options = {}
     options.reverse_merge!(:verify_ssl => 9)
-    options.assert_valid_keys(:ssl_client_key, :ssl_client_cert, :ssl_ca_file, :verify_ssl)
+    options.assert_valid_keys(:ssl_client_key, :ssl_client_cert, :ssl_ca_file, :verify_ssl, :proxy_host, :proxy_port, :proxy_user, :proxy_password)
 
     @url = url
     @uri = URI.parse(@url)
     if options[:proxy_host]
-      @net = ::Net::HTTP::Proxy(options[:proxy_host], oprions[:proxy_port], oprions[:proxy_user], oprions[:proxy_password]).new(@uri.host, @uri.port)
+      @net = ::Net::HTTP::Proxy(options[:proxy_host], options[:proxy_port], options[:proxy_user], options[:proxy_password]).new(@uri.host, @uri.port)
     else
       @net = ::Net::HTTP.new(@uri.host, @uri.port)
     end
@@ -294,10 +294,16 @@ module ManifestReader
     attr_accessor :cdn_url, :cdn_ca
     attr_accessor :basedir, :version, :created
     attr_accessor :consumer, :products, :entitlements, :consumer_types
+    attr_accessor :proxy_host, :proxy_port, :proxy_user, :proxy_password
 
-    def initialize manifest_file_or_directory, cdn_url = nil, cdn_ca = nil
+    def initialize manifest_file_or_directory, cdn_url = nil, cdn_ca = nil, proxy_host = nil, proxy_port = nil, proxy_user = nil, proxy_password = nil
       @cdn_url = cdn_url
       @cdn_ca  = cdn_ca
+      @proxy_host = proxy_host
+      @proxy_port = proxy_port
+      @proxy_user = proxy_user
+      @proxy_password = proxy_password
+
       if File.directory? manifest_file_or_directory
         basedir = manifest_file_or_directory
       else
@@ -361,7 +367,11 @@ module ManifestReader
             cdn_url,
             :ssl_ca_file => cdn_ca,
             :ssl_client_cert => OpenSSL::X509::Certificate.new(entitlement.cert),
-            :ssl_client_key => OpenSSL::PKey::RSA.new(entitlement.key)))
+            :ssl_client_key => OpenSSL::PKey::RSA.new(entitlement.key),
+            :proxy_host => proxy_host,
+            :proxy_port => proxy_port,
+            :proxy_user => proxy_user,
+            :proxy_password => proxy_password))
 
         entitlement.provided_products.each do |product|
           Rails.logger.debug "Processing product #{product.name}"

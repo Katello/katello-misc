@@ -195,6 +195,19 @@ subcommands = {
       LOG.fatal "Provide a valid file: #{manifest}" if not File.exists? manifest
       options[:manifest] = manifest
     end
+    opts.on( '--proxy-host PROXY_HOST', _('HTTP Proxy host FQDN') ) do |value|
+      options[:proxy_host] = value
+    end
+    opts.on( '--proxy-port PROXY_PORT', _('HTTP Proxy port') ) do |value|
+      LOG.fatal "Provide a valid port: #{value}" if value.to_i.to_s != value
+      options[:proxy_port] = value
+    end
+    opts.on( '--proxy-user PROXY_USER', _('HTTP Proxy user (proxy username, if auth is required)') ) do |value|
+      options[:proxy_user] = value
+    end
+    opts.on( '--proxy-password PROXY_PASSWORD', _('HTTP Proxy pass (proxy password, if auth is required)') ) do |value|
+      options[:proxy_password] = value
+    end
     opts.on( '-u', '--cdnurl URL', _("Base CDN URL (%s)") % DEFAULT_CDNURL ) do |value|
       options[:cdn_url] = value
     end
@@ -352,11 +365,11 @@ class ActiveManifest
     end
   end
 
-  def import manifest_file, cdnca_file
+  def import manifest_file, cdnca_file, proxy_host = nil, proxy_port = nil, proxy_user = nil, proxy_password = nil
     # import basic manifest
     LOG.fatal _("Please provide a manifest using --manifest option") if manifest_file.nil?
     LOG.fatal _("Unable to read file %s, specify --cdnca option") % cdnca_file unless File.exist? cdnca_file
-    imanifest = ManifestReader::Manifest.new manifest_file, cdn_url, cdn_ca
+    imanifest = ManifestReader::Manifest.new manifest_file, cdn_url, cdn_ca, proxy_host, proxy_port, proxy_user, proxy_password
 
     # populate repositories
     total_repos = imanifest.populate_repositories
@@ -453,7 +466,7 @@ end
 
 active_manifest = ActiveManifest.new options
 if command == 'import'
-  active_manifest.import options[:manifest], options[:cdn_ca]
+  active_manifest.import options[:manifest], options[:cdn_ca], options[:proxy_host], options[:proxy_port], options[:proxy_user], options[:proxy_password]
 elsif command == 'refresh'
   active_manifest.refresh options[:cdn_ca]
 elsif command == 'info'
