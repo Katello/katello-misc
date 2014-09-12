@@ -109,6 +109,14 @@ install -m 0644 man/katello-disconnected.man1 %{buildroot}%{_mandir}/man1/katell
 
 
 %changelog
+* Fri Sep 12 2014 Justin Sherrill <jsherril@redhat.com> 2.0.0-1
+- fixes #7252, BZ1040112 - adding support for a proxy (mmccune@redhat.com)
+- fixes #6921,BZ102410 - ensure only root can execute (mmccune@redhat.com)
+- fixes #6265 - better error handing for missing listing files on the CDN
+  (mmccune@redhat.com)
+- fixes 5629 - adding proper BuildRequires (mmccune@redhat.com)
+- fixes 5624 - adding a publish command (mmccune@redhat.com)
+
 * Wed Apr 09 2014 Mike McCune <mmccune@redhat.com> 1.5.2-1
 - Merge pull request #28 from ehelms/fixes-5067 (ericdhelms@gmail.com)
 - Fixes #5067: Updates paths to Katello gem BZ1083201 (ericdhelms@gmail.com)
