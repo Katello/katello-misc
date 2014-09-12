@@ -19,7 +19,7 @@
 %endif
 
 Name:           katello-utils
-Version:        1.5.2
+Version:        2.0.0
 Release:        1%{?dist}
 Summary:        Additional tools for Katello
 
