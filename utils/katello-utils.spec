@@ -109,6 +109,9 @@ install -m 0644 man/katello-disconnected.man1 %{buildroot}%{_mandir}/man1/katell
 
 
 %changelog
+* Fri Sep 12 2014 Justin Sherrill <jsherril@redhat.com> 2.1.0-1
+- bumping version to 2.1 (jsherril@redhat.com)
+
 * Fri Sep 12 2014 Justin Sherrill <jsherril@redhat.com> 2.0.0-1
 - fixes #7252, BZ1040112 - adding support for a proxy (mmccune@redhat.com)
 - fixes #6921,BZ102410 - ensure only root can execute (mmccune@redhat.com)
