@@ -42,6 +42,9 @@ install -m 644 katello-pulp.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
 %{_sysconfdir}/yum.repos.d/*.repo
 
 %changelog
+* Fri Sep 12 2014 Justin Sherrill <jsherril@redhat.com> 2.1.0-1
+- removing katello-foreman repo (mmccune@redhat.com)
+
 * Fri Oct 11 2013 Partha Aji <paji@redhat.com> 1.5.1-1
 - Bumping package versions for 1.5 (paji@redhat.com)
 
