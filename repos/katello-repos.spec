@@ -1,6 +1,6 @@
 
 Name:           katello-repos
-Version:        2.0.0
+Version:        2.0.1
 Release:        1%{?dist}
 Summary:        Definition of yum repositories for Katello
 
@@ -42,6 +42,9 @@ install -m 644 katello-pulp.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
 %{_sysconfdir}/yum.repos.d/*.repo
 
 %changelog
+* Mon Sep 15 2014 Justin Sherrill <jsherril@redhat.com> 2.0.1-1
+- refs #7442 - updating 2.0 repos for new layout (jsherril@redhat.com)
+
 * Fri Sep 12 2014 Justin Sherrill <jsherril@redhat.com> 2.0.0-1
 - removing katello-foreman repo (mmccune@redhat.com)
 
