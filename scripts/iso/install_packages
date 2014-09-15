@@ -54,8 +54,13 @@ DEST_DIR = "/opt/satellite/"
 
 ISO_PACKAGE_DIR = os.path.join(PWD, "Packages")
 ISO_REPODATA_DIR = os.path.join(PWD, "repodata")
+ISO_SCL_PACKAGE_DIR = os.path.join(PWD, "RHSCL/Packages")
+ISO_SCL_REPODATA_DIR = os.path.join(PWD, "RHSCL/repodata")
 DEST_PACKAGE_DIR = os.path.join(DEST_DIR, "Packages")
 DEST_REPODATA_DIR = os.path.join(DEST_DIR, "repodata")
+
+SCL_DEST_PACKAGE_DIR = os.path.join(DEST_DIR, "RHSCL/Packages")
+SCL_DEST_REPODATA_DIR = os.path.join(DEST_DIR, "RHSCL/repodata")
 
 INDENT = "   - "
 
@@ -85,6 +90,18 @@ shutil.copytree(ISO_PACKAGE_DIR, DEST_PACKAGE_DIR)
 shutil.copytree(ISO_REPODATA_DIR, DEST_REPODATA_DIR)
 
 
+# Only used if the ISO contains the RHSCL repo
+if os.path.exists("./RHSCL"):
+  if (os.path.exists(SCL_DEST_PACKAGE_DIR)):
+      shutil.rmtree(SCL_DEST_PACKAGE_DIR)
+
+  if (os.path.exists(SCL_DEST_REPODATA_DIR)):
+      shutil.rmtree(SCL_DEST_REPODATA_DIR)
+
+  shutil.copytree(ISO_SCL_PACKAGE_DIR, SCL_DEST_PACKAGE_DIR)
+  shutil.copytree(ISO_SCL_REPODATA_DIR, SCL_DEST_REPODATA_DIR)
+
+
 # Create a yum repository pointing to the current directory
 # making sure to disable gpgcheck if packages are not signed
 
@@ -101,6 +118,21 @@ baseurl=file://%s
 enabled=1
 gpgcheck=%s""" % (DEST_DIR, GPG_CHECK))
 repo_file.close()
+
+# If the SCL directory is on the ISO, create a repo for it as well
+if os.path.exists("./RHSCL"):
+  print INDENT + "Creating RHSCL Repository File"
+  repo_file = open(REPO_FILE, 'a')
+  repo_file.write("""
+#
+# Repository for the locally mounted SCL repo
+#
+[scl-local]
+name=scl-local
+baseurl=file://%(baseurl)s/RHSCL
+enabled=1
+gpgcheck=%(gpgcheck)s""" % dict (baseurl = DEST_DIR, gpgcheck = GPG_CHECK))
+  repo_file.close()
 
 # Determine if we need to do install or update
 
