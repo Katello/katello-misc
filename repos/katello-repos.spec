@@ -1,6 +1,6 @@
 
 Name:           katello-repos
-Version:        2.0.1
+Version:        2.0.2
 Release:        1%{?dist}
 Summary:        Definition of yum repositories for Katello
 
@@ -42,6 +42,9 @@ install -m 644 katello-pulp.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
 %{_sysconfdir}/yum.repos.d/*.repo
 
 %changelog
+* Fri Oct 03 2014 Justin Sherrill <jsherril@redhat.com> 2.0.2-1
+- Repos - Enabling GPG check in repos. (jsherril@redhat.com)
+
 * Mon Sep 15 2014 Justin Sherrill <jsherril@redhat.com> 2.0.1-1
 - refs #7442 - updating 2.0 repos for new layout (jsherril@redhat.com)
 
