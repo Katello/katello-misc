@@ -15,7 +15,7 @@
   </packages>
   <repositories>
     <repository name="zoo">
-      <url>http://lzap.fedorapeople.org/fakerepos/zoo/</url>
+      <url>https://lzap.fedorapeople.org/fakerepos/zoo/</url>
     </repository>
   </repositories>
 </template>

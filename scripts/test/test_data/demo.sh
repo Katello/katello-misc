@@ -15,11 +15,11 @@ $CMD environment create --name="dev" --org="ACME_Corporation" --prior="Library"
 $CMD environment create --name="prod" --org="ACME_Corporation" --prior="dev"
 
 
-$CMD product create --name="zoo" --provider="porkchop" --org="ACME_Corporation" --url="http://tstrachota.fedorapeople.org/dummy_repos/" --assumeyes
-$CMD product create --name="fake" --provider="porkchop" --org="ACME_Corporation" --url="http://lzap.fedorapeople.org/fakerepos/fewupdates/" --assumeyes
-$CMD product create --name="candlepin" --provider="porkchop" --org="ACME_Corporation" --url="http://repos.fedorapeople.org/repos/candlepin/candlepin/fedora-15/" --assumeyes
+$CMD product create --name="zoo" --provider="porkchop" --org="ACME_Corporation" --url="https://tstrachota.fedorapeople.org/dummy_repos/" --assumeyes
+$CMD product create --name="fake" --provider="porkchop" --org="ACME_Corporation" --url="https://lzap.fedorapeople.org/fakerepos/fewupdates/" --assumeyes
+$CMD product create --name="candlepin" --provider="porkchop" --org="ACME_Corporation" --url="https://repos.fedorapeople.org/repos/candlepin/candlepin/fedora-15/" --assumeyes
 
 
-#(+)  [1] http://repos.fedorapeople.org/repos/candlepin/candlepin/fedora-15/x86_64
-#(+)  [2] http://repos.fedorapeople.org/repos/candlepin/candlepin/fedora-15/SRPMS
-#(+)  [3] http://repos.fedorapeople.org/repos/candlepin/candlepin/fedora-15/i386
+#(+)  [1] https://repos.fedorapeople.org/repos/candlepin/candlepin/fedora-15/x86_64
+#(+)  [2] https://repos.fedorapeople.org/repos/candlepin/candlepin/fedora-15/SRPMS
+#(+)  [3] https://repos.fedorapeople.org/repos/candlepin/candlepin/fedora-15/i386
