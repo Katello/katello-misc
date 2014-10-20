@@ -2,14 +2,14 @@
 
 [katello]
 name=Katello Stable
-baseurl=http://fedorapeople.org/groups/katello/releases/yum/nightly/katello/@SUBDIR@/$releasever/$basearch/
+baseurl=https://fedorapeople.org/groups/katello/releases/yum/nightly/katello/@SUBDIR@/$releasever/$basearch/
 gpgkey=http://www.katello.org/gpg/RPM-GPG-KEY-katello-2012.gpg
 enabled=1
 gpgcheck=0
 
 [katello-source]
 name=Katello Stable Source
-baseurl=http://fedorapeople.org/groups/katello/releases/source/nightly/katello/@SUBDIR@/$releasever/
+baseurl=https://fedorapeople.org/groups/katello/releases/source/nightly/katello/@SUBDIR@/$releasever/
 gpgkey=http://www.katello.org/gpg/RPM-GPG-KEY-katello-2012.gpg
 enabled=0
 gpgcheck=0

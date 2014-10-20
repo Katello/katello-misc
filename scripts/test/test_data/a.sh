@@ -17,18 +17,18 @@ $CMD environment create --name="env_2" --org="ACME_Corporation" --prior="env_1"
 $CMD provider create --name="prov_a1" --org="ACME_Corporation" --type="custom"
 $CMD provider create --name="prov_a2" --org="ACME_Corporation" --type="custom"
 
-$CMD product create --name="prod_a1" --provider="prov_a1" --org="ACME_Corporation" --url="http://tstrachota.fedorapeople.org/dummy_repos/" --assumeyes
-$CMD product create --name="prod_a2" --provider="prov_a1" --org="ACME_Corporation" --url="http://lzap.fedorapeople.org/fakerepos/" --assumeyes
+$CMD product create --name="prod_a1" --provider="prov_a1" --org="ACME_Corporation" --url="https://tstrachota.fedorapeople.org/dummy_repos/" --assumeyes
+$CMD product create --name="prod_a2" --provider="prov_a1" --org="ACME_Corporation" --url="https://lzap.fedorapeople.org/fakerepos/" --assumeyes
 #$CMD product create --name="prod_a3" --provider="prov_a2" --org="ACME_Corporation"
 #$CMD product create --name="prod_a4" --provider="prov_a2" --org="ACME_Corporation"
 
-# $CMD repo create --org="ACME_Corporation" --product="prod_a1" --url="http://lzap.fedorapeople.org/fakerepos/"         --name="repo_fake_a1" --assumeyes
-# $CMD repo create --org="ACME_Corporation" --product="prod_a1" --url="http://tstrachota.fedorapeople.org/dummy_repos/" --name="repo_zoo_a1" --assumeyes
-# $CMD repo create --org="ACME_Corporation" --product="prod_a2" --url="http://lzap.fedorapeople.org/fakerepos/"         --name="repo_fake_a2" --assumeyes
-# $CMD repo create --org="ACME_Corporation" --product="prod_a2" --url="http://tstrachota.fedorapeople.org/dummy_repos/" --name="repo_zoo_a2" --assumeyes
-# $CMD repo create --org="ACME_Corporation" --product="prod_a3" --url="http://lzap.fedorapeople.org/fakerepos/"         --name="repo_fake_a3" --assumeyes
-# $CMD repo create --org="ACME_Corporation" --product="prod_a3" --url="http://tstrachota.fedorapeople.org/dummy_repos/" --name="repo_zoo_a3" --assumeyes
-# $CMD repo create --org="ACME_Corporation" --product="prod_a4" --url="http://lzap.fedorapeople.org/fakerepos/"         --name="repo_fake_a4" --assumeyes
-# $CMD repo create --org="ACME_Corporation" --product="prod_a4" --url="http://tstrachota.fedorapeople.org/dummy_repos/" --name="repo_zoo_a4" --assumeyes
+# $CMD repo create --org="ACME_Corporation" --product="prod_a1" --url="https://lzap.fedorapeople.org/fakerepos/"         --name="repo_fake_a1" --assumeyes
+# $CMD repo create --org="ACME_Corporation" --product="prod_a1" --url="https://tstrachota.fedorapeople.org/dummy_repos/" --name="repo_zoo_a1" --assumeyes
+# $CMD repo create --org="ACME_Corporation" --product="prod_a2" --url="https://lzap.fedorapeople.org/fakerepos/"         --name="repo_fake_a2" --assumeyes
+# $CMD repo create --org="ACME_Corporation" --product="prod_a2" --url="https://tstrachota.fedorapeople.org/dummy_repos/" --name="repo_zoo_a2" --assumeyes
+# $CMD repo create --org="ACME_Corporation" --product="prod_a3" --url="https://lzap.fedorapeople.org/fakerepos/"         --name="repo_fake_a3" --assumeyes
+# $CMD repo create --org="ACME_Corporation" --product="prod_a3" --url="https://tstrachota.fedorapeople.org/dummy_repos/" --name="repo_zoo_a3" --assumeyes
+# $CMD repo create --org="ACME_Corporation" --product="prod_a4" --url="https://lzap.fedorapeople.org/fakerepos/"         --name="repo_fake_a4" --assumeyes
+# $CMD repo create --org="ACME_Corporation" --product="prod_a4" --url="https://tstrachota.fedorapeople.org/dummy_repos/" --name="repo_zoo_a4" --assumeyes
 
 

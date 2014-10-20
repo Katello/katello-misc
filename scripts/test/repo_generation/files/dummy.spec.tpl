@@ -5,7 +5,7 @@ Summary:  A dummy package of ###NAME###
 License:  GPLv2
 
 Group:          Internet/Applications
-URL:            http://tstrachota.fedorapeople.org
+URL:            https://tstrachota.fedorapeople.org
 Source:         ###NAME###.tar.gz
 
 ###REQUIRES###
