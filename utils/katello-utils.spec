@@ -19,7 +19,7 @@
 %endif
 
 Name:           katello-utils
-Version:        2.1.0
+Version:        2.2.0
 Release:        1%{?dist}
 Summary:        Additional tools for Katello
 
@@ -109,6 +109,9 @@ install -m 0644 man/katello-disconnected.man1 %{buildroot}%{_mandir}/man1/katell
 
 
 %changelog
+* Fri Dec 19 2014 David Davis <daviddavis@redhat.com> 2.2.0-1
+- 
+
 * Fri Sep 12 2014 Justin Sherrill <jsherril@redhat.com> 2.1.0-1
 - bumping version to 2.1 (jsherril@redhat.com)
 
