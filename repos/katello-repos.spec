@@ -1,7 +1,7 @@
 
 Name:           katello-repos
-Version:        2.1.0
-Release:        1%{?dist}
+Version:        2.1.1
+Release:        2%{?dist}
 Summary:        Definition of yum repositories for Katello
 
 Group:          Applications/Internet
@@ -42,6 +42,11 @@ install -m 644 katello-pulp.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
 %{_sysconfdir}/yum.repos.d/*.repo
 
 %changelog
+* Mon Dec 22 2014 David Davis <daviddavis@redhat.com> 2.1.1-2
+- Merge pull request #39 from ehelms/fixes-7442 (eric.d.helms@gmail.com)
+- Fixes #7442: Change repo structure to group by version and project.
+  (ericdhelms@gmail.com)
+
 * Fri Sep 12 2014 Justin Sherrill <jsherril@redhat.com> 2.1.0-1
 - removing katello-foreman repo (mmccune@redhat.com)
 
