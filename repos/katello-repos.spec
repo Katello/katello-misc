@@ -35,8 +35,6 @@ for repofile in *.repo; do
 done
  
 install -m 644 katello.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
-install -m 644 katello-candlepin.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
-install -m 644 katello-pulp.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
 
 %files
 %{_sysconfdir}/yum.repos.d/*.repo
