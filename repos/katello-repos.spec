@@ -1,7 +1,7 @@
 
 Name:           katello-repos
 Version:        2.1.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Definition of yum repositories for Katello
 
 Group:          Applications/Internet
@@ -42,6 +42,9 @@ install -m 644 katello-pulp.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
 %{_sysconfdir}/yum.repos.d/*.repo
 
 %changelog
+* Mon Dec 22 2014 David Davis <daviddavis@redhat.com> 2.1.1-4
+- Fixing repos repo files for 2.1 (daviddavis@redhat.com)
+
 * Mon Dec 22 2014 David Davis <daviddavis@redhat.com> 2.1.1-3
 - Updating the repo files for 2.1 release (daviddavis@redhat.com)
 
