@@ -2,8 +2,8 @@
 
 [katello]
 name=Katello Stable
-baseurl=http://fedorapeople.org/groups/katello/releases/yum/nightly/katello/@SUBDIR@/$releasever/$basearch/
-gpgkey=http://www.katello.org/gpg/RPM-GPG-KEY-katello-2012.gpg
+baseurl=https://fedorapeople.org/groups/katello/releases/yum/nightly/katello/@SUBDIR@/$releasever/$basearch/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-katello
 enabled=1
 gpgcheck=0
 
@@ -11,8 +11,8 @@ gpgcheck=0
 # copy of Pulp's packages in order to ensure compatibility
 [katello-pulp]
 name=Pulp Community Releases
-baseurl=http://fedorapeople.org/groups/katello/releases/yum/katello-pulp/@SUBDIR@/$releasever/$basearch/
-gpgkey=http://www.katello.org/gpg/RPM-GPG-KEY-katello-2012.gpg
+baseurl=https://fedorapeople.org/groups/katello/releases/yum/katello-pulp/@SUBDIR@/$releasever/$basearch/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-katello
 enabled=1
 gpgcheck=0
 
@@ -21,8 +21,8 @@ gpgcheck=0
 
 [katello-candlepin]
 name=An open source entitlement management system.
-baseurl=http://fedorapeople.org/groups/katello/releases/yum/katello-candlepin/@SUBDIR@/$releasever/$basearch/
-gpgkey=http://www.katello.org/gpg/RPM-GPG-KEY-katello-2012.gpg
+baseurl=https://fedorapeople.org/groups/katello/releases/yum/katello-candlepin/@SUBDIR@/$releasever/$basearch/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-katello
 enabled=1
 gpgcheck=0
 
@@ -30,21 +30,21 @@ gpgcheck=0
 
 [katello-source]
 name=Katello Stable Source
-baseurl=http://fedorapeople.org/groups/katello/releases/source/nightly/katello/@SUBDIR@/$releasever/
-gpgkey=http://www.katello.org/gpg/RPM-GPG-KEY-katello-2012.gpg
+baseurl=https://fedorapeople.org/groups/katello/releases/source/nightly/katello/@SUBDIR@/$releasever/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-katello
 enabled=0
 gpgcheck=0
 
 [katello-pulp-source]
 name=Katello Pulp source
-baseurl=http://fedorapeople.org/groups/katello/releases/source/katello-pulp/@SUBDIR@/$releasever/
-gpgkey=http://www.katello.org/gpg/RPM-GPG-KEY-katello-2012.gpg
+baseurl=https://fedorapeople.org/groups/katello/releases/source/katello-pulp/@SUBDIR@/$releasever/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-katello
 enabled=0
 gpgcheck=0
 
 [katello-candlepin-source]
 name=Katello Candlepin source
-baseurl=http://fedorapeople.org/groups/katello/releases/source/katello-candlepin/@SUBDIR@/$releasever/
-gpgkey=http://www.katello.org/gpg/RPM-GPG-KEY-katello-2012.gpg
+baseurl=https://fedorapeople.org/groups/katello/releases/source/katello-candlepin/@SUBDIR@/$releasever/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-katello
 enabled=0
 gpgcheck=0
