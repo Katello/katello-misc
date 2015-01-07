@@ -24,7 +24,7 @@ Defines yum repositories for Katello and its sub projects, Candlepin and Pulp.
 %install
 #prepare dir structure
 install -d -m 0755 %{buildroot}%{_sysconfdir}/yum.repos.d
-
+install -d -m 0755 %{buildroot}%{_sysconfdir}/pki/rpm-gpg/
 # some sane default value
 %define reposubdir      RHEL
 # redefine on fedora
@@ -35,11 +35,11 @@ for repofile in *.repo; do
 done
  
 install -m 644 katello.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
-install -m 644 katello-candlepin.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
-install -m 644 katello-pulp.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
+install -m 644 RPM-GPG-KEY-katello-2012 %{buildroot}%{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-katello
 
 %files
 %{_sysconfdir}/yum.repos.d/*.repo
+%{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-katello
 
 %changelog
 * Mon Dec 22 2014 David Davis <daviddavis@redhat.com> 2.1.1-4
