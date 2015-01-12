@@ -1,7 +1,7 @@
 # Place this file in your /etc/yum.repos.d/ directory
 
 [katello]
-name=Katello Stable
+name=Katello 2.1
 baseurl=https://fedorapeople.org/groups/katello/releases/yum/2.1/katello/@SUBDIR@/$releasever/$basearch/
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-katello
 enabled=1
@@ -29,7 +29,7 @@ gpgcheck=0
 # source repositories
 
 [katello-source]
-name=Katello Stable Source
+name=Katello 2.1 Source
 baseurl=https://fedorapeople.org/groups/katello/releases/source/2.1/katello/@SUBDIR@/$releasever/
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-katello
 enabled=0
