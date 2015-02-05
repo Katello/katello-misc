@@ -1,6 +1,6 @@
 
 Name:           katello-repos
-Version:        2.1.2
+Version:        2.1.3
 Release:        1%{?dist}
 Summary:        Definition of yum repositories for Katello
 
@@ -42,6 +42,9 @@ install -m 644 RPM-GPG-KEY-katello-2012 %{buildroot}%{_sysconfdir}/pki/rpm-gpg/R
 %{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-katello
 
 %changelog
+* Thu Feb 05 2015 Justin Sherrill <jsherril@redhat.com> 2.1.3-1
+- updating 2.1 repos with gpg check (jsherril@redhat.com)
+
 * Mon Jan 26 2015 David Davis <daviddavis@redhat.com> 2.1.2-1
 - Set version of Katello in repository name. (ericdhelms@gmail.com)
 - backporting repo changes to 2.1 (jsherril@redhat.com)
