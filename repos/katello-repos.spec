@@ -42,6 +42,13 @@ install -m 644 RPM-GPG-KEY-katello-2012 %{buildroot}%{_sysconfdir}/pki/rpm-gpg/R
 %{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-katello
 
 %changelog
+* Tue Feb 24 2015 Eric D. Helms <ericdhelms@gmail.com> 2.2.0-2
+- Bump release to 2.2.0-2 (ericdhelms@gmail.com)
+- Update repo name to nightly for Katello. (ericdhelms@gmail.com)
+- fixing repo urls to match new format (jsherril@redhat.com)
+- fixes #7959 - use https for yum repos and local gpg key (jsherril@redhat.com)
+- fixes #7739 - combine three katello repo files into one (jsherril@redhat.com)
+
 * Tue Feb 24 2015 Eric D. Helms <ericdhelms@gmail.com>
 - Update repo name to nightly for Katello. (ericdhelms@gmail.com)
 - fixing repo urls to match new format (jsherril@redhat.com)
