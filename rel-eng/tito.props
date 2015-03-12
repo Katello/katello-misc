@@ -1,6 +1,6 @@
 [globalconfig]
 default_builder = tito.builder.Builder
-default_tagger = tito.tagger.VersionTagger
+default_tagger = tito.tagger.ReleaseTagger
 
 [katello-2.2-rhel6]
 disttag = .el6
