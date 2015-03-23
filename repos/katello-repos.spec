@@ -10,11 +10,20 @@ URL:            http://www.katello.org
 Source0:        https://fedorahosted.org/releases/k/a/katello/%{name}-%{version}.tar.gz
 
 BuildArch:      noarch
-Provides:       katello-repos-testing = 0.2.7
-Obsoletes:      katello-repos-testing < 0.2.7
 
 %description
 Defines yum repositories for Katello and its sub projects, Candlepin and Pulp.
+
+%package -n katello-client-repos
+Summary:  Definition of yum repositories for Katello clients
+Group:	  Applications/System
+
+%description -n katello-client-repos
+Defines yum repositories for Katello clients.
+
+%files -n katello-client-repos
+%{_sysconfdir}/yum.repos.d/katello-client.repo
+%{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-katello
 
 %prep
 %setup -q
@@ -35,6 +44,7 @@ for repofile in *.repo; do
 done
  
 install -m 644 katello.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
+install -m 644 katello-client.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
 install -m 644 RPM-GPG-KEY-katello-2012 %{buildroot}%{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-katello
 
 %files
