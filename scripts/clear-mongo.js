@@ -1,2 +1,0 @@
-db.getCollectionNames();
-db.dropDatabase();
