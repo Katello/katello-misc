@@ -2,7 +2,7 @@
 default_builder = tito.builder.Builder
 default_tagger = tito.tagger.ReleaseTagger
 
-[katello-nightyl-rhel5]
+[katello-nightly-rhel5]
 disttag = .el5
 whitelist = katello-repos
 
