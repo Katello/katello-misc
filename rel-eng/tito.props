@@ -2,6 +2,10 @@
 default_builder = tito.builder.Builder
 default_tagger = tito.tagger.ReleaseTagger
 
+[katello-2.2-rhel5]
+disttag = .el5
+whitelist = katello-repos
+
 [katello-2.2-rhel6]
 disttag = .el6
 blacklist =
@@ -9,3 +13,12 @@ blacklist =
 [katello-2.2-rhel7]
 disttag = .el7
 blacklist =
+
+[katello-2.2-fedora20]
+disttag = .fc20
+whitelist = katello-repos
+
+[katello-2.2-fedora21]
+disttag = .fc21
+whitelist = katello-repos
+
