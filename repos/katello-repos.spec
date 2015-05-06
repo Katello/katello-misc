@@ -1,7 +1,7 @@
 
 Name:           katello-repos
 Version:        2.2.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Definition of yum repositories for Katello
 
 Group:          Applications/Internet
@@ -60,6 +60,9 @@ rm -rf %{buildroot}
 %{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-katello
 
 %changelog
+* Wed May 06 2015 Eric D. Helms <ericdhelms@gmail.com> 2.2.0-5
+- update katello-repos spec for el5 (jsherril@redhat.com)
+
 * Wed Apr 15 2015 Eric D. Helms <ericdhelms@gmail.com> 2.2.0-4
 - Fixes #7760: Adds client repo
 - Update repos to say 2.2 instead of nightly. (ericdhelms@gmail.com)
