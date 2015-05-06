@@ -9,6 +9,7 @@ License:        GPLv2
 URL:            http://www.katello.org
 Source0:        https://fedorahosted.org/releases/k/a/katello/%{name}-%{version}.tar.gz
 
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 
 %description
@@ -16,12 +17,13 @@ Defines yum repositories for Katello and its sub projects, Candlepin and Pulp.
 
 %package -n katello-client-repos
 Summary:  Definition of yum repositories for Katello clients
-Group:	  Applications/System
+Group:    Applications/System
 
 %description -n katello-client-repos
 Defines yum repositories for Katello clients.
 
 %files -n katello-client-repos
+%defattr(-, root, root)
 %{_sysconfdir}/yum.repos.d/katello-client.repo
 %{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-katello
 
@@ -31,6 +33,8 @@ Defines yum repositories for Katello clients.
 %build
 
 %install
+rm -rf %{buildroot}
+
 #prepare dir structure
 install -d -m 0755 %{buildroot}%{_sysconfdir}/yum.repos.d
 install -d -m 0755 %{buildroot}%{_sysconfdir}/pki/rpm-gpg/
@@ -47,7 +51,11 @@ install -m 644 katello.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
 install -m 644 katello-client.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
 install -m 644 RPM-GPG-KEY-katello-2012 %{buildroot}%{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-katello
 
+%clean
+rm -rf %{buildroot}
+
 %files
+%defattr(-, root, root)
 %{_sysconfdir}/yum.repos.d/*.repo
 %{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-katello
 
