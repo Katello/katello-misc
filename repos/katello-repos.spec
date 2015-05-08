@@ -1,7 +1,7 @@
 
 Name:           katello-repos
 Version:        2.2.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Definition of yum repositories for Katello
 
 Group:          Applications/Internet
@@ -60,6 +60,9 @@ rm -rf %{buildroot}
 %{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-katello
 
 %changelog
+* Fri May 08 2015 Eric D. Helms <ericdhelms@gmail.com> 2.2.0-7
+- updating gpg key to new key
+
 * Thu May 07 2015 Eric D. Helms <ericdhelms@gmail.com> 2.2.0-6
 - Enable gpgkey check. Also, set client to 2.2 repos. (ericdhelms@gmail.com)
 
