@@ -49,7 +49,7 @@ done
  
 install -m 644 katello.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
 install -m 644 katello-client.repo %{buildroot}%{_sysconfdir}/yum.repos.d/
-install -m 644 RPM-GPG-KEY-katello-2012 %{buildroot}%{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-katello
+install -m 644 RPM-GPG-KEY-katello-2015 %{buildroot}%{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-katello
 
 %clean
 rm -rf %{buildroot}
