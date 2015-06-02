@@ -1,7 +1,7 @@
 
 Name:           katello-repos
-Version:        2.2.0
-Release:        7%{?dist}
+Version:        2.2.1
+Release:        1%{?dist}
 Summary:        Definition of yum repositories for Katello
 
 Group:          Applications/Internet
