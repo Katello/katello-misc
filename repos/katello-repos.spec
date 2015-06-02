@@ -62,6 +62,11 @@ rm -rf %{buildroot}
 %{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-katello
 
 %changelog
+* Tue Jun 02 2015 Eric D. Helms <ericdhelms@gmail.com> 2.2.1-1
+- Version bump to 2.2.1 (ericdhelms@gmail.com)
+- Set priority to avoid qpid library collision with epel.
+  (ericdhelms@gmail.com)
+
 * Fri May 08 2015 Eric D. Helms <ericdhelms@gmail.com> 2.2.0-7
 - updating gpg key to new key
 
