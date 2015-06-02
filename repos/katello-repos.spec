@@ -12,6 +12,8 @@ Source0:        https://fedorahosted.org/releases/k/a/katello/%{name}-%{version}
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 
+Requires: yum-plugin-priorities
+
 %description
 Defines yum repositories for Katello and its sub projects, Candlepin and Pulp.
 

@@ -6,6 +6,7 @@ baseurl=https://fedorapeople.org/groups/katello/releases/yum/2.2/client/@SUBDIR@
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-katello
 enabled=1
 gpgcheck=1
+priority=1
 
 # source repositories
 
