@@ -58,7 +58,7 @@ class DisconnectedPulp
           pulp_task = @runcible.resources.repository.publish repoid, d['id'], {}
         end
       end
-    end  
+    end
     # wait for repos to finish publishing
     puts _("Waiting for repos to finish publishing")
     self.watch(10, repoids.join(','), false, watch_type = :publish_status)
@@ -92,7 +92,7 @@ class DisconnectedPulp
     end
     active_manifest.save_repo_conf
   end
-  
+
   def puppet_queries(repoid, queries)
     LOG.debug ("updating repo: #{repoid} with queries: #{queries}")
     repo = @runcible.extensions.repository.retrieve_with_details(repoid)
@@ -130,7 +130,7 @@ class DisconnectedPulp
         # Yum, ISO and Export
         distributors = [Runcible::Models::YumDistributor.new(relative_url, true, false, {:id => 'yum_distributor'}),
             Runcible::Models::ExportDistributor.new(true, false)]
-  
+
         yum_importer = Runcible::Models::YumImporter.new
         yum_importer.feed = repo.url
         yum_importer.ssl_ca_cert = manifest.read_cdn_ca
@@ -139,12 +139,12 @@ class DisconnectedPulp
         @runcible.extensions.repository.create_with_importer_and_distributors(repoid, yum_importer, distributors)
       end
     end
-    
+
     # enable or disable the puppet forge repo
     if puppet and not purepos.include?(puppet_forge_id)
       LOG.debug _("Adding Puppet Forge repo")
       puppet_importer = Runcible::Models::PuppetImporter.new({"feed" => "http://forge.puppetlabs.com"})
-      puppet_distributors = [Runcible::Models::PuppetDistributor.new('/', true, false, :id => "puppet_distirubtor"), 
+      puppet_distributors = [Runcible::Models::PuppetDistributor.new('/', true, false, :id => "puppet_distirubtor"),
                              Runcible::Models::ExportDistributor.new(true, false)]
       @runcible.extensions.repository.create_with_importer_and_distributors(puppet_forge_id, puppet_importer, puppet_distributors)
       LOG.debug _("Done adding Puppet Forge repo")
@@ -238,7 +238,7 @@ class DisconnectedPulp
     puts _('Watching finished')
   end
 
-  def export(target_basedir = nil, repoids = nil, overwrite = false, onlycreate = false, 
+  def export(target_basedir = nil, repoids = nil, overwrite = false, onlycreate = false,
              onlyexport = false, start_date=nil, end_date=nil)
     LOG.fatal _('Please provide target directory, see --help') if target_basedir.nil?
     overwrite = false if overwrite.nil?
@@ -247,7 +247,7 @@ class DisconnectedPulp
     # active_repos = manifest.repositories
     all_repos = @runcible.resources.repository.retrieve_all(:optional => {:details => true})
     active_repos = {}
-    all_repos.each do |r| 
+    all_repos.each do |r|
       active_repos[r[:id]] = @runcible.extensions.repository.retrieve_with_details(r[:id])
     end
     if repoids
@@ -255,7 +255,7 @@ class DisconnectedPulp
     else
       repoids = all_repos.collect{|r| r[:id]}
     end
-    
+
     # create directory structure
     repoids.each do |repoid|
       repo = active_repos[repoid]
@@ -286,9 +286,9 @@ class DisconnectedPulp
     # check if we are using start/end dates
     start_end_options = {}
     unless start_date.nil? and end_date.nil?
-      start_end_options = {:start_date => start.date, :end_date => end_date}
+      start_end_options = {:start_date => start_date, :end_date => end_date}
     end
-    
+
     # initiate export
     repoids.each do |repoid|
       # repo = active_repos[repoid]
@@ -303,7 +303,7 @@ class DisconnectedPulp
             distributors.each do |d|
               pulp_task = @runcible.resources.repository.publish repoid, d['id'], start_end_options
             end
-            # 
+            #
           end
         end
       rescue RestClient::ResourceNotFound => e
@@ -330,7 +330,7 @@ class DisconnectedPulp
                      "cat content-export-* | tar xzpf -\n\n"\
                      "echo \"*** Done expanding archives. ***\"\n"
     # puts unsplit_script
-    f = File.open("#{target_basedir}/expand_export.sh", 'w') 
+    f = File.open("#{target_basedir}/expand_export.sh", 'w')
     f.write(unsplit_script)
     f.chmod(0755)
     # Clean up dir trees
@@ -340,17 +340,17 @@ class DisconnectedPulp
     puts _("Done exporting content, please copy #{target_basedir}/* to your disconnected host")
     puts ""
   end
-  
+
 private
-  
+
   def get_relative_url(repo)
     # Find the yum_distributor so we can get the basedir
     repo_path = nil
     repo['distributors'].each do |d|
       repo_path = d['config']['relative_url'] if d['id'] == 'yum_distributor'
     end
-    # if not found default to / 
+    # if not found default to /
     repo_path ||= '/'
   end
-  
+
 end
