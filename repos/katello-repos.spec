@@ -1,7 +1,7 @@
 
 Name:           katello-repos
 Version:        2.3.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Definition of yum repositories for Katello
 
 Group:          Applications/Internet
@@ -62,6 +62,9 @@ rm -rf %{buildroot}
 %{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-katello
 
 %changelog
+* Tue Jul 07 2015 Stephen Benjamin <stbenjam@redhat.com> 2.3.0-4
+- Update for Katello 2.3.0 
+
 * Wed Jun 03 2015 Justin Sherrill <jsherril@redhat.com> 2.3.0-3
 - Set priority to avoid qpid library collision with epel.
   (ericdhelms@gmail.com)
