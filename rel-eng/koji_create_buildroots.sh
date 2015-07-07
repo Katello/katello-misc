@@ -9,19 +9,19 @@ koji-katello clone-tag katello-thirdparty-rhel6 katello-$VERSION-thirdparty-rhel
 koji-katello add-tag katello-$VERSION-rhel6-build  --arches=x86_64
 koji-katello add-tag katello-$VERSION-rhel6-override
 koji-katello add-tag-inheritance katello-$VERSION-rhel6-build katello-$VERSION-rhel6-override
-koji-katello add-tag-inheritance katello-$VERSION-rhel6-override katello-$VERSION-thirdparty-rhel6
 koji-katello add-tag-inheritance katello-$VERSION-rhel6-override katello-$VERSION-rhel6
+koji-katello add-tag-inheritance katello-$VERSION-rhel6 katello-$VERSION-thirdparty-rhel6
 
 #plugins needs to take higher precedence 
 koji-katello add-tag-inheritance katello-$VERSION-rhel6-build foreman-plugins-$FOREMAN_VERSION-rhel6-override --priority=2
 koji-katello add-tag-inheritance katello-$VERSION-rhel6-build foreman-$FOREMAN_VERSION-rhel6 --priority=3
 
-
 koji-katello add-target katello-$VERSION-rhel6 katello-$VERSION-rhel6-build
 
-koji-katello add-external-repo  rhel-6.5-server -t katello-$VERSION-rhel6-build
-koji-katello add-external-repo  rhel-6.5-server-optional -t katello-$VERSION-rhel6-build
-koji-katello add-external-repo  epel-6 -t katello-$VERSION-rhel6-build
+koji-katello add-external-repo rhel-6.6-server -t katello-$VERSION-rhel6-build
+koji-katello add-external-repo rhel-6.6-server-optional -t katello-$VERSION-rhel6-build
+koji-katello add-external-repo epel-6 -t katello-$VERSION-rhel6-build
+koji-katello add-external-repo rhscl-1.1-rhel-6 -t katello-$VERSION-rhel6-build
 koji-katello add-external-repo jpackage-5.0-generic-free -t katello-$VERSION-rhel6-build
 
 BUILD_PKGS=`koji-katello  list-groups katello-nightly-rhel6-build build |  tail -n +2 |   awk -F ':' '{print $1}'    | tr  "\\n" " "`
@@ -94,8 +94,8 @@ koji-katello add-tag katello-$VERSION-thirdparty-pulp-rhel6-build --arches=x86_6
 koji-katello add-tag-inheritance katello-$VERSION-thirdparty-pulp-rhel6-build katello-$VERSION-thirdparty-pulp-rhel6
 koji-katello add-target katello-$VERSION-thirdparty-pulp-rhel6 katello-$VERSION-thirdparty-pulp-rhel6-build
 
-koji-katello add-external-repo  rhel-6.5-server -t katello-$VERSION-thirdparty-pulp-rhel6-build
-koji-katello add-external-repo  rhel-6.5-server-optional -t katello-$VERSION-thirdparty-pulp-rhel6-build
+koji-katello add-external-repo  rhel-6.6-server -t katello-$VERSION-thirdparty-pulp-rhel6-build
+koji-katello add-external-repo  rhel-6.6-server-optional -t katello-$VERSION-thirdparty-pulp-rhel6-build
 koji-katello add-external-repo  epel-6 -t katello-$VERSION-thirdparty-pulp-rhel6-build
 
 koji-katello regen-repo katello-$VERSION-thirdparty-pulp-rhel6-build
@@ -124,8 +124,8 @@ koji-katello add-tag-inheritance katello-$VERSION-thirdparty-candlepin-rhel6-ove
 
 koji-katello add-target katello-$VERSION-thirdparty-candlepin-rhel6 katello-$VERSION-thirdparty-candlepin-rhel6-build
 
-koji-katello add-external-repo rhel-6.5-server -t katello-$VERSION-thirdparty-candlepin-rhel6-build
-koji-katello add-external-repo rhel-6.5-server-optional -t katello-$VERSION-thirdparty-candlepin-rhel6-build
+koji-katello add-external-repo rhel-6.6-server -t katello-$VERSION-thirdparty-candlepin-rhel6-build
+koji-katello add-external-repo rhel-6.6-server-optional -t katello-$VERSION-thirdparty-candlepin-rhel6-build
 koji-katello add-external-repo epel-6 -t katello-$VERSION-thirdparty-candlepin-rhel6-build
 
 koji-katello regen-repo katello-$VERSION-thirdparty-candlepin-rhel6-build
