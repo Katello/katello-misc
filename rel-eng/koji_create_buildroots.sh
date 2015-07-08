@@ -86,6 +86,46 @@ koji-katello add-group-pkg katello-$VERSION-rhel5-build srpm-build $SRPM_BUILD_P
 
 koji-katello regen-repo katello-$VERSION-rhel5-build
 
+#Fedora 20 Client
+
+koji-katello clone-tag katello-nightly-fedora20 katello-$VERSION-fedora20
+
+koji-katello add-tag katello-$VERSION-fedora20-build  --arches=x86_64,i386
+koji-katello add-tag-inheritance katello-$VERSION-fedora20-build katello-$VERSION-fedora20
+koji-katello add-target katello-$VERSION-fedora20 katello-$VERSION-fedora20-build
+
+koji-katello add-external-repo fedora-20 -t katello-$VERSION-fedora20-build
+koji-katello add-external-repo fedora-20-updates -t katello-$VERSION-fedora20-build
+
+BUILD_PKGS=`koji-katello  list-groups katello-nightly-fedora20-build build |  tail -n +2 |   awk -F ':' '{print $1}'    | tr  "\\n" " "`
+SRPM_BUILD_PKGS=`koji-katello  list-groups katello-nightly-fedora20-build srpm-build |  tail -n +2 |   awk -F ':' '{print $1}'    | tr  "\\n" " "`
+koji-katello add-group katello-$VERSION-fedora20-build build
+koji-katello add-group katello-$VERSION-fedora20-build srpm-build
+koji-katello add-group-pkg katello-$VERSION-fedora20-build build $BUILD_PKGS
+koji-katello add-group-pkg katello-$VERSION-fedora20-build srpm-build $SRPM_BUILD_PKGS
+
+koji-katello regen-repo katello-$VERSION-fedora20-build
+
+#Fedora 21 Client
+
+koji-katello clone-tag katello-nightly-fedora21 katello-$VERSION-fedora21
+
+koji-katello add-tag katello-$VERSION-fedora21-build  --arches=x86_64,i386
+koji-katello add-tag-inheritance katello-$VERSION-fedora21-build katello-$VERSION-fedora21
+koji-katello add-target katello-$VERSION-fedora21 katello-$VERSION-fedora21-build
+
+koji-katello add-external-repo fedora-21 -t katello-$VERSION-fedora21-build
+koji-katello add-external-repo fedora-21-updates -t katello-$VERSION-fedora21-build
+
+BUILD_PKGS=`koji-katello  list-groups katello-nightly-fedora21-build build |  tail -n +2 |   awk -F ':' '{print $1}'    | tr  "\\n" " "`
+SRPM_BUILD_PKGS=`koji-katello  list-groups katello-nightly-fedora21-build srpm-build |  tail -n +2 |   awk -F ':' '{print $1}'    | tr  "\\n" " "`
+koji-katello add-group katello-$VERSION-fedora21-build build
+koji-katello add-group katello-$VERSION-fedora21-build srpm-build
+koji-katello add-group-pkg katello-$VERSION-fedora21-build build $BUILD_PKGS
+koji-katello add-group-pkg katello-$VERSION-fedora21-build srpm-build $SRPM_BUILD_PKGS
+
+koji-katello regen-repo katello-$VERSION-fedora21-build
+
 #Pulp RHEL 6
 
 koji-katello clone-tag katello-thirdparty-pulp-rhel6 katello-$VERSION-thirdparty-pulp-rhel6
@@ -145,4 +185,3 @@ koji-katello add-external-repo rhel-7.0-server-optional -t katello-$VERSION-thir
 koji-katello add-external-repo epel-7-beta -t katello-$VERSION-thirdparty-candlepin-rhel7-build
 
 koji-katello regen-repo katello-$VERSION-thirdparty-candlepin-rhel7-build
-
