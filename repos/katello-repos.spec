@@ -1,7 +1,7 @@
 
 Name:           katello-repos
 Version:        2.3.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Definition of yum repositories for Katello
 
 Group:          Applications/Internet
@@ -62,6 +62,8 @@ rm -rf %{buildroot}
 %{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-katello
 
 %changelog
+* Mon Jul 13 2015 Stephen Benjamin <stbenjam@redhat.com> 2.3.0-6
+- Fixed rel-eng for 2.3
 * Mon Jul 13 2015 Stephen Benjamin <stbenjam@redhat.com> 2.3.0-5
 - Updating repository URL to 2.3 (stbenjam@redhat.com)
 
