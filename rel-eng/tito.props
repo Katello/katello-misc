@@ -10,15 +10,15 @@ whitelist = katello-repos
 disttag = .el6
 blacklist =
 
-[katello-nightly-rhel7]
+[katello-2.3-rhel7]
 disttag = .el7
 blacklist =
 
-[katello-nightly-fedora20]
+[katello-2.3-fedora20]
 disttag = .fc20
 whitelist = katello-repos
 
-[katello-nightly-fedora21]
+[katello-2.3-fedora21]
 disttag = .fc21
 whitelist = katello-repos
 
