@@ -20,7 +20,7 @@
 
 Name:           katello-utils
 Version:        2.3.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Additional tools for Katello
 
 Group:          Applications/Internet
@@ -109,6 +109,9 @@ install -m 0644 man/katello-disconnected.man1 %{buildroot}%{_mandir}/man1/katell
 
 
 %changelog
+* Mon Jul 13 2015 Stephen Benjamin <stbenjam@redhat.com> 2.3.0-2
+- Updated rel-eng 
+
 * Tue Jul 07 2015 Stephen Benjamin <stbenjam@redhat.com> 2.3.0-1
 - Update for Katello 2.3.0
 - Fixes #10706: Fix data range export (ericdhelms@gmail.com)
