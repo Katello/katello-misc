@@ -16,9 +16,14 @@
 # workaround for: https://github.com/grosser/fast_gettext/issues/32
 Encoding.default_external='UTF-8' if RUBY_VERSION >= '1.9'
 
+# solution reference: http://lists.openshift.redhat.com/openshift-archives/dev/2014-July/msg00193.html
+ENV['LD_LIBRARY_PATH'] += ':/opt/rh/v8314/root/usr/lib64'
+
 APP_NAME = 'katello-disconnected'
 DISCONNECTED_PREFIX = ENV['DISCONNECTED_PREFIX'] || '/usr/share/katello-disconnected'
 
+require 'action_view'
+require 'v8'
 require 'katello'
 require 'ostruct'
 require 'yaml'
