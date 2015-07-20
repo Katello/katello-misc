@@ -223,11 +223,11 @@ subcommands = {
   end,
   'puppet_queries' => OptionParser.new do |opts|
     opts.banner = _("Usage:") + " " + _('puppet_filter [--filters filters]')
-    opts.on( '-q', '--queries QUERIES', _('comma-separated list of queries to determine ' + 
+    opts.on( '-q', '--queries QUERIES', _('comma-separated list of queries to determine ' +
                             'what Puppet modules you wish to sync. Blank means all. ') ) do |queries|
       options[:queries] = queries
     end
-  end, 
+  end,
   'refresh' => OptionParser.new do |opts|
     opts.banner = _("Usage:") + " " + _('refresh')
     opts.on( '-a', '--cdnca FILE', _("CDN CA file (%s)") % DEFAULT_CDNCA ) do |value|
@@ -267,7 +267,7 @@ subcommands = {
   end,
   'disable_puppet' => OptionParser.new do |opts|
     opts.banner = _("Usage:") + " " + _('disable_puppet')
-  end, 
+  end,
   'select' => OptionParser.new do |opts|
     opts.banner = _("Usage:") + " " + _('select')
   end,
@@ -318,14 +318,14 @@ subcommands = {
     opts.on( '-n', '--end_date END_DATE', _('end date for content export; format: "2011-03-30 00:00:00"') ) do |value|
       options[:end_date] = value
     end
-    
+
   end,
   'clean' => OptionParser.new do |opts|
     opts.banner = _("Usage:") + " " + _('clean')
   end,
   'publish' => OptionParser.new do |opts|
     opts.banner = _("Usage:") + " " + _('publish')
-  end, 
+  end,
 }
 
 begin
@@ -379,10 +379,10 @@ class ActiveManifest
     # populate repositories
     total_repos = imanifest.populate_repositories
     LOG.verbose _("Total repositories found: %s") % total_repos
-    
-    
+
+
     # Add pre-defined puppet forge
-    
+
 
     # import successful - move to active
     @manifest = imanifest
@@ -506,7 +506,7 @@ elsif command == 'watch'
 elsif command == 'export'
   pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
   pulp.export options[:target], options[:repos], options[:overwrite],
-    options[:onlycreate], options[:onlyexport], options[:start_date], 
+    options[:onlycreate], options[:onlyexport], options[:start_date],
     options[:end_date]
 elsif command == 'clean'
   pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
@@ -516,8 +516,8 @@ elsif command == 'publish'
   pulp.publish
 elsif command == 'configure' or command == 'config'
   pulp = DisconnectedPulp.new active_manifest, options, LOG, runcible
-  pulp.configure options[:remove], CONFIG['puppet'], 
-                 options[:puppet_forge_url], DEFAULT_PUPPET_FORGE_ID 
+  pulp.configure options[:remove], CONFIG['puppet'],
+                 options[:puppet_forge_url], DEFAULT_PUPPET_FORGE_ID
 elsif command == 'setup'
   File.open(CONFIG_DIR + "/config.yml", "w") do |file|
     LOG.debug _("Saving configuration to %s/config.yml") % CONFIG_DIR
